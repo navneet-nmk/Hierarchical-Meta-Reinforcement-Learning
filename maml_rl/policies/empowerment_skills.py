@@ -1,5 +1,7 @@
 import numpy as np
 import torch
+import torch.nn.functional as F
+from rlkit.torch.sac.sac import SoftActorCritic
 
 
 print("Using the torch version : ", torch.__version__)
@@ -92,7 +94,7 @@ class EmpowermentSkills(object):
 
         """
         Create minimization operation for the critic Q function.
-        :return:
+        :return: TD Loss, Empowerment Reward
         """
 
         q_value = self.qvf(observation, action)
@@ -125,7 +127,58 @@ class EmpowermentSkills(object):
 
         return temporal_difference_loss, empowerment_reward
 
-    
+    def update_actor(self, observation):
+        """
+        Creates minimization operations for the policy and state value functions.
+
+        In principle, there is no need for a separate state value function
+        approximator, since it could be evaluated using the Q-function and
+        policy. However, in practice, the separate function approximator
+        stabilizes training.
+
+
+
+        :return:
+        """
+
+        policy_distribution = self.policy.get_distibution(observation)
+        log_pi = policy_distribution.log_pi
+
+        value_function = self.vf(observation)
+        log_target = self.qvf(observation, F.tanh(policy_distribution.action))
+        corr = self._squash_correction(policy_distribution.action)
+
+        scaled_log_pi = self.scale_entropy*(log_pi-corr)
+        kl_target = scaled_log_pi-log_target+value_function
+        kl_target.detach()
+        kl_surrogate_loss =torch.mean(log_pi*kl_target)
+
+        value_function_target = log_target-scaled_log_pi
+        value_function_target.detach()
+        value_function_loss = torch.nn.MSELoss()(value_function, value_function_target)
+
+        return value_function_loss, kl_surrogate_loss, corr
+
+    def update_discriminator(self, observation, action):
+        """
+
+        Creates the minimization operation for the discriminator.
+
+        :return:
+        """
+
+        (observation, z_one_hot) = self.split_obs(observation)
+
+        if self.include_actions:
+            logits = self.discriminator(observation, action)
+        else:
+            logits = self.discriminator(observation)
+
+        discriminator_loss = torch.nn.CrossEntropyLoss()(z_one_hot, logits)
+
+        return discriminator_loss
+
+
 
 
 
