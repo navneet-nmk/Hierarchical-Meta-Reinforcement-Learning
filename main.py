@@ -10,11 +10,15 @@ from maml_rl.baseline import LinearFeatureBaseline
 from maml_rl.sampler import BatchSampler
 
 from tensorboardX import SummaryWriter
+import sys
+print(sys.path)
+
 
 def total_rewards(episodes_rewards, aggregation=torch.mean):
     rewards = torch.mean(torch.stack([aggregation(torch.sum(rewards, dim=0))
         for rewards in episodes_rewards], dim=0))
     return rewards.item()
+
 
 def main(args):
     continuous_actions = (args.env_name in ['AntVel-v1', 'AntDir-v1',
@@ -76,7 +80,7 @@ if __name__ == '__main__':
         'Model-Agnostic Meta-Learning (MAML)')
 
     # General
-    parser.add_argument('--env-name', type=str,
+    parser.add_argument('--env-name', type=str, default='HalfCheetahDir-v1',
         help='name of the environment')
     parser.add_argument('--gamma', type=float, default=0.95,
         help='value of the discount factor gamma')
@@ -122,6 +126,7 @@ if __name__ == '__main__':
         help='set the device (cpu or cuda)')
 
     args = parser.parse_args()
+    print(mp.cpu_count()-1)
 
     # Create logs and saves folder if they don't exist
     if not os.path.exists('./logs'):
