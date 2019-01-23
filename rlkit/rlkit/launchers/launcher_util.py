@@ -12,10 +12,10 @@ import __main__ as main
 import dateutil.tz
 import numpy as np
 
-from rlkit.core import logger
-from rlkit.launchers import config
-from rlkit.torch.pytorch_util import set_gpu_mode
-import rlkit.pythonplusplus as ppp
+from rlkit.rlkit.core import logger
+from rlkit.rlkit.launchers import config
+from rlkit.rlkit.torch.pytorch_util import set_gpu_mode
+import rlkit.rlkit.pythonplusplus as ppp
 
 GitInfo = namedtuple(
     'GitInfo',

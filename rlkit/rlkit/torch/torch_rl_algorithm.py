@@ -3,9 +3,9 @@ from typing import Iterable
 
 import numpy as np
 
-from rlkit.core.rl_algorithm import RLAlgorithm
-from rlkit.torch import pytorch_util as ptu
-from rlkit.torch.core import PyTorchModule
+from rlkit.rlkit.core.rl_algorithm import RLAlgorithm
+from rlkit.rlkit.torch import pytorch_util as ptu
+from rlkit.rlkit.torch.core import PyTorchModule
 
 
 class TorchRLAlgorithm(RLAlgorithm, metaclass=abc.ABCMeta):

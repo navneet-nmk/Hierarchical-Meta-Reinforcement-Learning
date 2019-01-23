@@ -1,5 +1,5 @@
 import numpy as np
-from rlkit.data_management.simple_replay_buffer import SimpleReplayBuffer
+from rlkit.rlkit.data_management.simple_replay_buffer import SimpleReplayBuffer
 from gym.spaces import Box, Discrete, Tuple
 
 

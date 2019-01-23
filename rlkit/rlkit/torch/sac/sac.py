@@ -4,10 +4,10 @@ import numpy as np
 import torch.optim as optim
 from torch import nn as nn
 
-import rlkit.torch.pytorch_util as ptu
-from rlkit.core.eval_util import create_stats_ordered_dict
-from rlkit.torch.torch_rl_algorithm import TorchRLAlgorithm
-from rlkit.torch.sac.policies import MakeDeterministic
+import rlkit.rlkit.torch.pytorch_util as ptu
+from rlkit.rlkit.core.eval_util import create_stats_ordered_dict
+from rlkit.rlkit.torch.torch_rl_algorithm import TorchRLAlgorithm
+from rlkit.rlkit.torch.sac.policies import MakeDeterministic
 
 
 class SoftActorCritic(TorchRLAlgorithm):

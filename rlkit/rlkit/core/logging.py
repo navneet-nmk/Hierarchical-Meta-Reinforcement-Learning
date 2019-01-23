@@ -17,7 +17,7 @@ from enum import Enum
 import dateutil.tz
 import numpy as np
 
-from rlkit.core.tabulate import tabulate
+from rlkit.rlkit.core.tabulate import tabulate
 
 
 class TerminalTablePrinter(object):

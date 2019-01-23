@@ -1,6 +1,6 @@
 import torch
 from torch.distributions import Distribution, Normal
-import rlkit.torch.pytorch_util as ptu
+import rlkit.rlkit.torch.pytorch_util as ptu
 
 
 class TanhNormal(Distribution):

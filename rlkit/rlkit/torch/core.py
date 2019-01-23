@@ -5,8 +5,8 @@ from collections import OrderedDict
 from torch import nn as nn
 from torch.autograd import Variable
 
-from rlkit.torch import pytorch_util as ptu
-from rlkit.core.serializable import Serializable
+from rlkit.rlkit.torch import pytorch_util as ptu
+from rlkit.rlkit.core.serializable import Serializable
 
 
 class PyTorchModule(nn.Module, Serializable, metaclass=abc.ABCMeta):

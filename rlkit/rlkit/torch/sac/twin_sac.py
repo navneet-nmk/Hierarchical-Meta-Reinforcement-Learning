@@ -2,10 +2,10 @@ import numpy as np
 import torch
 import torch.optim as optim
 
-import rlkit.torch.pytorch_util as ptu
-from rlkit.core.eval_util import create_stats_ordered_dict
-from rlkit.torch.sac.policies import MakeDeterministic
-from rlkit.torch.torch_rl_algorithm import TorchRLAlgorithm
+import rlkit.rlkit.torch.pytorch_util as ptu
+from rlkit.rlkit.core.eval_util import create_stats_ordered_dict
+from rlkit.rlkit.torch.sac.policies import MakeDeterministic
+from rlkit.rlkit.torch.torch_rl_algorithm import TorchRLAlgorithm
 
 
 class TwinSAC(TorchRLAlgorithm):

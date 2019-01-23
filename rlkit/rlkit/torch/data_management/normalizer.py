@@ -1,8 +1,8 @@
 import torch
-import rlkit.torch.pytorch_util as ptu
+import rlkit.rlkit.torch.pytorch_util as ptu
 import numpy as np
 
-from rlkit.data_management.normalizer import Normalizer, FixedNormalizer
+from rlkit.rlkit.data_management.normalizer import Normalizer, FixedNormalizer
 
 
 class TorchNormalizer(Normalizer):

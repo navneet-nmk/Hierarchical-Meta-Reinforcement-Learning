@@ -1,4 +1,4 @@
-from rlkit.samplers.util import rollout
+from rlkit.rlkit.samplers.util import rollout
 
 
 class InPlacePathSampler(object):
