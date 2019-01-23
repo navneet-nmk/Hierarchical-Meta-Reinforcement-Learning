@@ -6,6 +6,7 @@ import gtimer as gt
 import rlkit.rlkit.torch.pytorch_util as ptu
 import torch.optim as optim
 from rlkit.rlkit.torch.torch_rl_algorithm import TorchRLAlgorithm
+from rlkit.rlkit.core.eval_util import create_stats_ordered_dict
 from tensorboardX import SummaryWriter
 
 
@@ -183,7 +184,7 @@ class EmpowermentSkills(TorchRLAlgorithm):
 
     def split_obs(self, obs):
         obs, z_one_hot = obs[:self.obs_dim], obs[self.obs_dim:]
-        return obs, obs
+        return obs, z_one_hot
 
     def update_critic(self, observation, action, p_z_given, next_observation, done):
 
@@ -224,25 +225,36 @@ class EmpowermentSkills(TorchRLAlgorithm):
 
         return qf1_loss, qf2_loss, empowerment_reward, v_pred
 
-    def update_actor(self, observation):
+    def update_state_value(self, observation, action, p_z_given,
+                           next_observation,
+                           done):
         """
-        Creates minimization operations for the policy and state value functions.
+        Creates minimization operations for the state value functions.
 
         In principle, there is no need for a separate state value function
         approximator, since it could be evaluated using the Q-function and
         policy. However, in practice, the separate function approximator
         stabilizes training.
 
-
-
         :return:
         """
+
+        qf1_loss, qf2_loss, empowerment_reward, _ = self.update_critic(observation=observation,
+                                                                       action=action,
+                                                                       p_z_given=p_z_given,
+                                                                       next_observation=next_observation,
+                                                                       done=done)
 
         # Make sure policy accounts for squashing functions like tanh correctly!
         policy_outputs = self.policy(observation,
                                      reparameterize=self.train_policy_with_reparameterization,
                                      return_log_prob=True)
         new_actions, policy_mean, policy_log_std, log_pi = policy_outputs[:4]
+
+        q_new_actions = torch.min(
+            self.qvf(observation, new_actions),
+            self.qvf_2(observation, new_actions),
+        )
 
         (observation, z_one_hot) = self.split_obs(obs=observation)
         v_pred = self.vf(observation)
@@ -263,24 +275,112 @@ class EmpowermentSkills(TorchRLAlgorithm):
             alpha = 1
             alpha_loss = 0
 
-
         policy_distribution = self.policy.get_distibution(observation)
         log_pi = policy_distribution.log_pi
 
-        value_function = self.vf(observation)
-        log_target = self.qvf(observation, F.tanh(policy_distribution.action))
-        corr = self._squash_correction(policy_distribution.action)
+        v_target = q_new_actions - alpha * log_pi
+        vf_loss = self.vf_criterion(v_pred, v_target.detach())
 
-        scaled_log_pi = self.scale_entropy*(log_pi-corr)
-        kl_target = scaled_log_pi-log_target+value_function
-        kl_target.detach()
-        kl_surrogate_loss =torch.mean(log_pi*kl_target)
+        """
+        Update networks
+        """
+        self.qf1_optimizer.zero_grad()
+        qf1_loss.backward()
+        self.qf1_optimizer.step()
 
-        value_function_target = log_target-scaled_log_pi
-        value_function_target.detach()
-        value_function_loss = torch.nn.MSELoss()(value_function, value_function_target)
+        self.qf2_optimizer.zero_grad()
+        qf2_loss.backward()
+        self.qf2_optimizer.step()
 
-        return value_function_loss, kl_surrogate_loss, corr
+        self.vf_optimizer.zero_grad()
+        vf_loss.backward()
+        self.vf_optimizer.step()
+
+        policy_loss = None
+        if self._n_train_steps_total % self.policy_update_period == 0:
+            """
+            Policy Loss
+            """
+            if self.train_policy_with_reparameterization:
+                policy_loss = (alpha * log_pi - q_new_actions).mean()
+            else:
+                log_policy_target = q_new_actions - v_pred
+                policy_loss = (
+                        log_pi * (alpha * log_pi - log_policy_target).detach()
+                ).mean()
+            mean_reg_loss = self.policy_mean_reg_weight * (policy_mean ** 2).mean()
+            std_reg_loss = self.policy_std_reg_weight * (policy_log_std ** 2).mean()
+            pre_tanh_value = policy_outputs[-1]
+            pre_activation_reg_loss = self.policy_pre_activation_weight * (
+                (pre_tanh_value ** 2).sum(dim=1).mean()
+            )
+            policy_reg_loss = mean_reg_loss + std_reg_loss + pre_activation_reg_loss
+            policy_loss = policy_loss + policy_reg_loss
+
+            self.policy_optimizer.zero_grad()
+            policy_loss.backward()
+            self.policy_optimizer.step()
+
+        if self._n_train_steps_total % self.target_update_period == 0:
+            ptu.soft_update_from_to(
+                self.vf, self.target_vf, self.soft_target_tau
+            )
+
+        """
+        Save some statistics for eval using just one batch.
+        """
+        if self.need_to_update_eval_statistics:
+            self.need_to_update_eval_statistics = False
+            if policy_loss is None:
+                if self.train_policy_with_reparameterization:
+                    policy_loss = (log_pi - q_new_actions).mean()
+                else:
+                    log_policy_target = q_new_actions - v_pred
+                    policy_loss = (
+                        log_pi * (log_pi - log_policy_target).detach()
+                    ).mean()
+
+                mean_reg_loss = self.policy_mean_reg_weight * (policy_mean**2).mean()
+                std_reg_loss = self.policy_std_reg_weight * (policy_log_std**2).mean()
+                pre_tanh_value = policy_outputs[-1]
+                pre_activation_reg_loss = self.policy_pre_activation_weight * (
+                    (pre_tanh_value**2).sum(dim=1).mean()
+                )
+                policy_reg_loss = mean_reg_loss + std_reg_loss + pre_activation_reg_loss
+                policy_loss = policy_loss + policy_reg_loss
+
+            self.eval_statistics['QF1 Loss'] = np.mean(ptu.get_numpy(qf1_loss))
+            self.eval_statistics['QF2 Loss'] = np.mean(ptu.get_numpy(qf2_loss))
+            self.eval_statistics['VF Loss'] = np.mean(ptu.get_numpy(vf_loss))
+            self.eval_statistics['Policy Loss'] = np.mean(ptu.get_numpy(
+                policy_loss
+            ))
+            self.eval_statistics.update(create_stats_ordered_dict(
+                'V Predictions',
+                ptu.get_numpy(v_pred),
+            ))
+            self.eval_statistics.update(create_stats_ordered_dict(
+                'Log Pis',
+                ptu.get_numpy(log_pi),
+            ))
+            self.eval_statistics.update(create_stats_ordered_dict(
+                'Policy mu',
+                ptu.get_numpy(policy_mean),
+            ))
+            self.eval_statistics.update(create_stats_ordered_dict(
+                'Policy log std',
+                ptu.get_numpy(policy_log_std),
+            ))
+            self.eval_statistics.update(create_stats_ordered_dict(
+                'Empowerment Reward',
+                ptu.get_numpy(empowerment_reward),
+            ))
+
+            if self.use_automatic_entropy_tuning:
+                self.eval_statistics['Alpha'] = alpha.item()
+                self.eval_statistics['Alpha Loss'] = alpha_loss.item()
+
+        return vf_loss, alpha_loss, alpha, qf1_loss, qf2_loss, empowerment_reward, policy_loss
 
     def update_discriminator(self, observation, action):
         """
@@ -297,11 +397,19 @@ class EmpowermentSkills(TorchRLAlgorithm):
         else:
             logits = self.discriminator(observation)
 
-        discriminator_loss = torch.nn.CrossEntropyLoss()(z_one_hot, logits)
+        discriminator_loss = torch.nn.CrossEntropyLoss()(logits, z_one_hot)
+
+        """
+        Update the discriminator
+        """
+
+        self.disc_optimizer.zero_grad()
+        discriminator_loss.backward()
+        self.disc_optimizer.step()
 
         return discriminator_loss
 
-    def _do_training(self):
+    def _do_training(self, i):
 
         """
 
@@ -318,28 +426,42 @@ class EmpowermentSkills(TorchRLAlgorithm):
         obs = batch['observations']
         actions = batch['actions']
         next_obs = batch['next_observations']
+        p_z = self.sample_empowerment_latents()
 
+        """
+        
+        Update the networks
+        
+        """
 
-        observation = self.env.reset()
-        self.policy.reset()
-        log_p_z_episode = []  # Store log_p_z for this episode
-        path_length = 0
-        path_return = 0
-        last_path_return = 0
-        max_path_return = -np.inf
-        n_episodes = 0
+        rews = np.mean(ptu.get_numpy(rewards))
 
-        if self.learn_p_z:
-            log_p_z_list = [deque(maxlen=self.max_path_length) for _ in range(self.num_skills)]
+        vf_loss, alpha_loss, alpha, qf1_loss, qf2_loss, emp_reward, pol_loss = self.update_state_value(
+            observation=obs,
+            action=actions,
+            done=terminals,
+            next_observation=next_obs,
+            p_z_given=p_z
+        )
 
-        gt.rename_root('RLAlgorithm')
-        gt.reset()
-        gt.set_def_unique(False)
+        # Update the discriminator
+        discriminator_loss = self.update_discriminator(observation=obs,
+                                                       action=actions)
 
-        total_time = gt.get_times().total
+        disc_loss = np.mean(ptu.get_numpy(discriminator_loss))
+        pol = np.mean(ptu.get_numpy(pol_loss))
+        emp_rew = np.mean(ptu.get_numpy(emp_reward))
+        value_loss = np.mean(ptu.get_numpy(vf_loss))
+        q1_loss = np.mean(ptu.get_numpy(qf1_loss))
+        q2_loss = np.mean(ptu.get_numpy(qf2_loss))
 
-        # Terminate the environment
-        self.env.terminate()
+        self.writer.add_scalar('data/reward', rews, i)
+        self.writer.add_scalar('data/policy_loss', pol, i)
+        self.writer.add_scalar('data/discriminator_loss', disc_loss, i)
+        self.writer.add_scalar('data/empowerment_rewards', emp_rew, i)
+        self.writer.add_scalar('data/value_loss', value_loss, i)
+        self.writer.add_scalar('data/q_value_loss_1', q1_loss, i)
+        self.writer.add_scalar('data/q_value_loss_2', q2_loss, i)
 
     @property
     def networks(self):
