@@ -13,6 +13,9 @@ from tensorboardX import SummaryWriter
 import sys
 print(sys.path)
 
+torch.manual_seed(7)
+seed = 7
+
 
 def total_rewards(episodes_rewards, aggregation=torch.mean):
     rewards = torch.mean(torch.stack([aggregation(torch.sum(rewards, dim=0))
@@ -70,6 +73,9 @@ def main(args):
                 'policy-{0}.pt'.format(batch)), 'wb') as f:
             torch.save(policy.state_dict(), f)
 
+    with open(os.path.join(save_folder, 'baseline.pt'), 'wb') as f:
+        torch.save(baseline.state_dict(), f)
+
 
 if __name__ == '__main__':
     import argparse
@@ -82,7 +88,7 @@ if __name__ == '__main__':
     # General
     parser.add_argument('--env-name', type=str, default='HalfCheetahDir-v1',
         help='name of the environment')
-    parser.add_argument('--gamma', type=float, default=0.95,
+    parser.add_argument('--gamma', type=float, default=0.99,
         help='value of the discount factor gamma')
     parser.add_argument('--tau', type=float, default=1.0,
         help='value of the discount factor for GAE')
@@ -98,11 +104,11 @@ if __name__ == '__main__':
     # Task-specific
     parser.add_argument('--fast-batch-size', type=int, default=20,
         help='batch size for each individual task')
-    parser.add_argument('--fast-lr', type=float, default=0.5,
+    parser.add_argument('--fast-lr', type=float, default=0.1,
         help='learning rate for the 1-step gradient update of MAML')
 
     # Optimization
-    parser.add_argument('--num-batches', type=int, default=200,
+    parser.add_argument('--num-batches', type=int, default=1000,
         help='number of batches')
     parser.add_argument('--meta-batch-size', type=int, default=40,
         help='number of tasks per batch')
@@ -118,7 +124,7 @@ if __name__ == '__main__':
         help='maximum number of iterations for line search')
 
     # Miscellaneous
-    parser.add_argument('--output-folder', type=str, default='maml',
+    parser.add_argument('--output-folder', type=str, default='maml-halfcheetah-dir',
         help='name of the output folder')
     parser.add_argument('--num-workers', type=int, default=mp.cpu_count() - 1,
         help='number of workers for trajectories sampling')
@@ -126,7 +132,7 @@ if __name__ == '__main__':
         help='set the device (cpu or cuda)')
 
     args = parser.parse_args()
-    print(mp.cpu_count()-1)
+    print("Using ",str(mp.cpu_count()-1), " number of workers")
 
     # Create logs and saves folder if they don't exist
     if not os.path.exists('./logs'):
