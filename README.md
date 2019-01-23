@@ -8,7 +8,7 @@ The script also follows Soft actor critic which is being used as the lower level
 
 The repository also makes use of the SAC implementations in [rlkit](https://github.com/vitchyr/rlkit), however, since the rlkit repository is included with the package, there is no separate requirement to install the same.
 
-This repository also consists of a Pytorch implementation [policies/empowerment_skills.py](empowerment_skills.py) of the paper- [Diversity is all you need](https://arxiv.org/abs/1802.06070)
+This repository also consists of a Pytorch implementation [maml_rl/policies/empowerment_skills.py](empowerment_skills.py) of the paper- [Diversity is all you need](https://arxiv.org/abs/1802.06070)
 
 ## Getting started
 To avoid any conflict with your existing Python setup, and to keep this project self-contained, it is suggested to work in a virtual environment with [`virtualenv`](http://docs.python-guide.org/en/latest/dev/virtualenvs/). To install `virtualenv`:
