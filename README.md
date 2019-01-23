@@ -5,6 +5,8 @@
 Implementation of Exploration through Hierarchical Meta Reinforcement Learning in Pytorch. This implementation closely follows the implementation of MAML in Pytorch. [pytorch-maml-rl](https://github.com/tristandeleu/pytorch-maml-rl)
 The script also follows Soft actor critic which is being used as the lower level base policy in our setup.
 
+The repository also makes use of the SAC implementations in [rlkit](https://github.com/vitchyr/rlkit), however, since the rlkit repository is included with the package, there is no separate requirement to install the same.
+
 ## Getting started
 To avoid any conflict with your existing Python setup, and to keep this project self-contained, it is suggested to work in a virtual environment with [`virtualenv`](http://docs.python-guide.org/en/latest/dev/virtualenvs/). To install `virtualenv`:
 ```
