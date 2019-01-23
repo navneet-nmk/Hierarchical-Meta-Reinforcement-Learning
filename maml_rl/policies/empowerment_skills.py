@@ -182,16 +182,20 @@ class EmpowermentSkills(TorchRLAlgorithm):
         return np.random.choice(self.num_skills, p=self.p_z)
 
     def split_obs(self, obs):
+        obs, z_one_hot = obs[:self.obs_dim], obs[self.obs_dim:]
         return obs, obs
 
-    def update_critic(self, observation, action, p_z_given, done):
+    def update_critic(self, observation, action, p_z_given, next_observation, done):
 
         """
         Create minimization operation for the critic Q function.
         :return: TD Loss, Empowerment Reward
         """
 
-        q_value = self.qvf(observation, action)
+        # Get the q value for the observation(obs, z_one_hot) and action.
+        q_value_1 = self.qvf(observation, action)
+        q_value_2 = self.qvf_2(observation, action)
+
         (observation, z_one_hot) = self.split_obs(obs=observation)
 
         if self.include_actions:
@@ -210,16 +214,15 @@ class EmpowermentSkills(TorchRLAlgorithm):
             empowerment_reward -= log_p_z
 
         # Now we will calculate the value function and critic Q function update.
-        vf_next_target = self.vf(observation)
+        vf_target_next_obs = self.target_vf(next_observation)
+        v_pred = self.vf(observation)
 
-        # Calculate the targets for the Q function
-        with torch.no_grad():
-            ys = empowerment_reward + (1 - done) * self.discount * vf_next_target
+        # Calculate the targets for the Q function (Calculate Q Function Loss)
+        q_target = self.reward_scale*empowerment_reward + (1 - done) * self.discount * vf_target_next_obs
+        qf1_loss = self.qf_criterion(q_value_1, q_target.detach())
+        qf2_loss = self.qf_criterion(q_value_2, q_target.detach())
 
-        ys.detach()
-        temporal_difference_loss = 0.5*torch.nn.MSELoss()(ys, q_value)
-
-        return temporal_difference_loss, empowerment_reward
+        return qf1_loss, qf2_loss, empowerment_reward, v_pred
 
     def update_actor(self, observation):
         """
@@ -234,6 +237,32 @@ class EmpowermentSkills(TorchRLAlgorithm):
 
         :return:
         """
+
+        # Make sure policy accounts for squashing functions like tanh correctly!
+        policy_outputs = self.policy(observation,
+                                     reparameterize=self.train_policy_with_reparameterization,
+                                     return_log_prob=True)
+        new_actions, policy_mean, policy_log_std, log_pi = policy_outputs[:4]
+
+        (observation, z_one_hot) = self.split_obs(obs=observation)
+        v_pred = self.vf(observation)
+
+        """
+               Alpha Loss (if applicable)
+               """
+        if self.use_automatic_entropy_tuning:
+            """
+            Alpha Loss
+            """
+            alpha_loss = -(self.log_alpha * (log_pi + self.target_entropy).detach()).mean()
+            self.alpha_optimizer.zero_grad()
+            alpha_loss.backward()
+            self.alpha_optimizer.step()
+            alpha = self.log_alpha.exp()
+        else:
+            alpha = 1
+            alpha_loss = 0
+
 
         policy_distribution = self.policy.get_distibution(observation)
         log_pi = policy_distribution.log_pi
@@ -272,7 +301,7 @@ class EmpowermentSkills(TorchRLAlgorithm):
 
         return discriminator_loss
 
-    def train(self):
+    def _do_training(self):
 
         """
 
@@ -282,6 +311,14 @@ class EmpowermentSkills(TorchRLAlgorithm):
 
         :return:
         """
+
+        batch = self.get_batch()
+        rewards = batch['rewards']
+        terminals = batch['terminals']
+        obs = batch['observations']
+        actions = batch['actions']
+        next_obs = batch['next_observations']
+
 
         observation = self.env.reset()
         self.policy.reset()
@@ -299,61 +336,31 @@ class EmpowermentSkills(TorchRLAlgorithm):
         gt.reset()
         gt.set_def_unique(False)
 
-        for epoch in gt.timed_for(range(self._n_epochs + 1),
-                                  save_itrs=True):
-            path_length_list = []
-            z = self.sample_empowerment_latents()
-            aug_obs = self.concat_obs_z(observation, z, self.num_skills)
-
-            for t in range(self._epoch_length):
-                iteration = t + epoch * self._epoch_length
-
-                action, _ = self.policy.get_action(aug_obs)
-
-
-                next_ob, reward, terminal, info = self.env.step(action)
-                aug_next_ob = self.concat_obs_z(next_ob, z,
-                                                 self.num_skills)
-                path_length += 1
-                path_return += reward
-
-                # Add the samples to the replay memory
-                self.pool.add_sample(
-                    aug_obs,
-                    action,
-                    reward,
-                    terminal,
-                    aug_next_ob,
-                )
-
-                # Reset the environment if done
-                if terminal or path_length >= self._max_path_length:
-                    path_length_list.append(path_length)
-                    observation = self.env.reset()
-                    self.policy.reset()
-                    log_p_z_episode = []
-                    path_length = 0
-                    max_path_return = max(max_path_return, path_return)
-                    last_path_return = path_return
-
-                    path_return = 0
-                    n_episodes += 1
-                else:
-                    aug_obs = aug_next_ob
-                gt.stamp('sample')
-
-                if self.pool.size >= self._min_pool_size:
-                    for i in range(self._n_train_repeat):
-                        batch = self._pool.random_batch(self._batch_size)
-                        # Get a batch of observations, actions and next observations.
-                        self._do_training(iteration, batch)
-
-                gt.stamp('train')
-
-            total_time = gt.get_times().total
+        total_time = gt.get_times().total
 
         # Terminate the environment
         self.env.terminate()
+
+    @property
+    def networks(self):
+        return [
+            self.policy,
+            self.qvf,
+            self.qvf_2,
+            self.vf,
+            self.target_vf,
+            self.discriminator
+        ]
+
+    def get_epoch_snapshot(self, epoch):
+        snapshot = super().get_epoch_snapshot(epoch)
+        snapshot['qf1'] = self.qvf
+        snapshot['qf2'] = self.qvf_2
+        snapshot['policy'] = self.policy
+        snapshot['vf'] = self.vf
+        snapshot['target_vf'] = self.target_vf
+        snapshot['discriminator'] = self.discriminator
+        return snapshot
 
 
 
