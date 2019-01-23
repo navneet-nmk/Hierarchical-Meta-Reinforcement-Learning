@@ -2,7 +2,8 @@
 
 ![HalfCheetahDir](https://raw.githubusercontent.com/tristandeleu/pytorch-maml-rl/master/_assets/halfcheetahdir.gif)
 
-Implementation of Exploration through Hierarchical Meta Reinforcement Learning in Pytorch. This implementation closely follows the implementation of MAML in Pytorch. [pytorch-maml-rl](https://github.com/tristandeleu/pytorch-maml-rl)
+Implementation of Exploration through Hierarchical Meta Reinforcement Learning in Pytorch. This implementation closely follows the implementation of MAML in Pytorch. [pytorch-maml-rl](https://github.com/tristandeleu/pytorch-maml-rl).
+
 The script also follows Soft actor critic which is being used as the lower level base policy in our setup.
 
 The repository also makes use of the SAC implementations in [rlkit](https://github.com/vitchyr/rlkit), however, since the rlkit repository is included with the package, there is no separate requirement to install the same.
