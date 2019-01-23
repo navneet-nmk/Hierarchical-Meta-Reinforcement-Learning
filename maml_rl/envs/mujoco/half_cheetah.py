@@ -75,6 +75,7 @@ class HalfCheetahVelEnv(HalfCheetahEnv):
         self._task = task
         self._goal_vel = task['velocity']
 
+
 class HalfCheetahDirEnv(HalfCheetahEnv):
     """Half-cheetah environment with target direction, as described in [1]. The 
     code is adapted from
