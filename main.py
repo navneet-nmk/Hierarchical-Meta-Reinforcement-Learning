@@ -8,6 +8,9 @@ from maml_rl.metalearner import MetaLearner
 from maml_rl.policies import CategoricalMLPPolicy, NormalMLPPolicy
 from maml_rl.baseline import LinearFeatureBaseline
 from maml_rl.sampler import BatchSampler
+from maml_rl.policies.empowerment_skills import EmpowermentSkills
+from rlkit.rlkit.torch.sac.policies import TanhGaussianPolicy
+from rlkit.rlkit.torch.networks import FlattenMlp
 
 from tensorboardX import SummaryWriter
 import sys
@@ -21,6 +24,65 @@ def total_rewards(episodes_rewards, aggregation=torch.mean):
     rewards = torch.mean(torch.stack([aggregation(torch.sum(rewards, dim=0))
         for rewards in episodes_rewards], dim=0))
     return rewards.item()
+
+
+def hierarchical_meta_policy(env, skills_dim, sampler, output_size, net_size):
+    higher_policy = CategoricalMLPPolicy(
+        int(np.prod(sampler.envs.observation_space.shape)),
+        skills_dim,
+        hidden_sizes=(args.hidden_size,) * args.num_layers)
+
+    observation_dim = int(np.prod(sampler.envs.observation_space.shape))
+    action_dim = int(np.prod(sampler.envs.action_space.shape))
+
+    hidden_size = net_size
+    output_size = output_size
+    skills_dim = skills_dim
+
+    # Define the networks
+
+    q_value_function_1 = FlattenMlp(
+        hidden_sizes=[hidden_size, hidden_size],
+        input_size=observation_dim + action_dim + skills_dim,
+        output_size=output_size)
+
+    q_value_function_2 = FlattenMlp(
+        hidden_sizes=[hidden_size, hidden_size],
+        input_size=observation_dim + action_dim + skills_dim,
+        output_size=output_size)
+
+    value_function = FlattenMlp(
+        hidden_sizes=[hidden_size, hidden_size],
+        input_size=observation_dim,
+        output_size=output_size
+    )
+
+    discriminator_function = FlattenMlp(
+        hidden_sizes=[hidden_size, hidden_size],
+        input_size=observation_dim,
+        output_size=skills_dim
+    )
+
+    policy = TanhGaussianPolicy(
+        hidden_sizes=[hidden_size, hidden_size],
+        obs_dim=observation_dim + skills_dim,
+        action_dim=action_dim
+    )
+
+    # Define the empowerment skills algorithm
+    algorithm = EmpowermentSkills(env=env,
+                                  policy=policy,
+                                  discriminator=discriminator_function,
+                                  q_value_function_1=q_value_function_1,
+                                  q_value_function_2=q_value_function_2,
+                                  value_function=value_function)
+
+    lower_policy = algorithm
+    baseline = LinearFeatureBaseline(
+        int(np.prod(sampler.envs.observation_space.shape))
+    )
+
+    return higher_policy, lower_policy, baseline
 
 
 def main(args):
