@@ -1,8 +1,9 @@
+"""
+Run EmpowermentSkills on HalfCheetahDir Environment.
+"""
+
 import numpy as np
 import torch
-import torch.nn.functional as F
-from collections import deque
-import gtimer as gt
 import rlkit.rlkit.torch.pytorch_util as ptu
 import torch.optim as optim
 from rlkit.rlkit.torch.torch_rl_algorithm import TorchRLAlgorithm
@@ -10,8 +11,9 @@ from rlkit.rlkit.torch.sac.policies import TanhGaussianPolicy
 from rlkit.rlkit.torch.networks import FlattenMlp
 from rlkit.rlkit.core.eval_util import create_stats_ordered_dict
 from tensorboardX import SummaryWriter
-import gym
-
+from rlkit.rlkit.envs.wrappers import NormalizedBoxEnv
+from gym.envs.mujoco import HalfCheetahEnv
+from rlkit.rlkit.launchers.launcher_util import setup_logger
 
 print("Using the torch version : ", torch.__version__)
 
@@ -27,7 +29,6 @@ class EmpowermentSkills(TorchRLAlgorithm):
                  q_value_function_1,
                  q_value_function_2,
                  value_function,
-                 pool,
 
                  policy_lr=1e-3,
                  qf_lr=1e-3,
@@ -43,7 +44,7 @@ class EmpowermentSkills(TorchRLAlgorithm):
                  scale_entropy=1,
                  discount=0.99,
                  tau=0.01,
-                 num_skills=20,
+                 num_skills=50,
                  save_full_state=False,
                  find_best_skill_interval=10,
                  best_skill_n_rollouts=10,
@@ -103,7 +104,6 @@ class EmpowermentSkills(TorchRLAlgorithm):
         self.qvf = q_value_function_1
         self.qvf_2 = q_value_function_2
         self.vf = value_function
-        self.pool = pool
         self.plotter = plotter
         self.lr = lr
         self.scale_entropy = scale_entropy
@@ -488,23 +488,29 @@ class EmpowermentSkills(TorchRLAlgorithm):
         return snapshot
 
 
-if __name__ == '__main__':
-    env = gym.make('')
-    observation_dim = None
-    action_dim = None
-    hidden_size = 100
-    output_size = 1
+def experiment(variant):
+    env = NormalizedBoxEnv(HalfCheetahEnv())
+    # Or for a specific version:
+    # import gym
+    # env = NormalizedBoxEnv(gym.make('HalfCheetah-v1'))
+
+    observation_dim = int(np.prod(env.observation_space.shape))
+    action_dim = int(np.prod(env.action_space.shape))
+
+    hidden_size = variant['net_size']
+    output_size = variant['output_size']
+    skills_dim = variant['skills_dim']
 
     # Define the networks
 
     q_value_function_1 = FlattenMlp(
         hidden_sizes=[hidden_size, hidden_size],
-        input_size=observation_dim + action_dim,
+        input_size=observation_dim + action_dim + skills_dim,
         output_size=output_size)
 
     q_value_function_2 = FlattenMlp(
         hidden_sizes=[hidden_size, hidden_size],
-        input_size=observation_dim + action_dim,
+        input_size=observation_dim + action_dim + skills_dim,
         output_size=output_size)
 
     value_function = FlattenMlp(
@@ -513,23 +519,54 @@ if __name__ == '__main__':
         output_size=output_size
     )
 
+    discriminator_function = FlattenMlp(
+        hidden_sizes=[hidden_size, hidden_size],
+        input_size=observation_dim,
+        output_size=skills_dim
+    )
+
     policy = TanhGaussianPolicy(
         hidden_sizes=[hidden_size, hidden_size],
-        obs_dim=observation_dim,
+        obs_dim=observation_dim + skills_dim,
         action_dim=action_dim
     )
 
+    # Define the empowerment skills algorithm
+    algorithm = EmpowermentSkills(env=env,
+                                  policy=policy,
+                                  discriminator=discriminator_function,
+                                  q_value_function_1=q_value_function_1,
+                                  q_value_function_2=q_value_function_2,
+                                  value_function=value_function)
+
+    algorithm.to(ptu.device)
+    algorithm.train()
 
 
+if __name__ == "__main__":
+    # noinspection PyTypeChecker
+    variant = dict(
+        algo_params=dict(
+            num_epochs=1000,
+            num_steps_per_epoch=1000,
+            num_steps_per_eval=1000,
+            batch_size=128,
+            max_path_length=1000,
+            discount=0.99,
+            reward_scale=1,
 
-
-
-
-
-
-
-
-
-
-
-
+            soft_target_tau=0.001,
+            policy_lr=3E-4,
+            qf_lr=3E-4,
+            vf_lr=3E-4,
+            include_actions=False,
+            learn_p_z=False,
+            add_p_z=True,
+        ),
+        net_size=300,
+        output_size=1,
+        skills_dim=50,
+    )
+    setup_logger('name-of-experiment', variant=variant)
+    # ptu.set_gpu_mode(True)  # optionally set the GPU (default=False)
+    experiment(variant)
