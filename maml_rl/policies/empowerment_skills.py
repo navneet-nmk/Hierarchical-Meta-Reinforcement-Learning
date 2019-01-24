@@ -6,8 +6,11 @@ import gtimer as gt
 import rlkit.rlkit.torch.pytorch_util as ptu
 import torch.optim as optim
 from rlkit.rlkit.torch.torch_rl_algorithm import TorchRLAlgorithm
+from rlkit.rlkit.torch.sac.policies import TanhGaussianPolicy
+from rlkit.rlkit.torch.networks import FlattenMlp
 from rlkit.rlkit.core.eval_util import create_stats_ordered_dict
 from tensorboardX import SummaryWriter
+import gym
 
 
 print("Using the torch version : ", torch.__version__)
@@ -483,6 +486,38 @@ class EmpowermentSkills(TorchRLAlgorithm):
         snapshot['target_vf'] = self.target_vf
         snapshot['discriminator'] = self.discriminator
         return snapshot
+
+
+if __name__ == '__main__':
+    env = gym.make('')
+    observation_dim = None
+    action_dim = None
+    hidden_size = 100
+    output_size = 1
+
+    # Define the networks
+
+    q_value_function_1 = FlattenMlp(
+        hidden_sizes=[hidden_size, hidden_size],
+        input_size=observation_dim + action_dim,
+        output_size=output_size)
+
+    q_value_function_2 = FlattenMlp(
+        hidden_sizes=[hidden_size, hidden_size],
+        input_size=observation_dim + action_dim,
+        output_size=output_size)
+
+    value_function = FlattenMlp(
+        hidden_sizes=[hidden_size, hidden_size],
+        input_size=observation_dim,
+        output_size=output_size
+    )
+
+    policy = TanhGaussianPolicy(
+        hidden_sizes=[hidden_size, hidden_size],
+        obs_dim=observation_dim,
+        action_dim=action_dim
+    )
 
 
 
