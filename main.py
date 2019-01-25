@@ -133,10 +133,10 @@ def main(args):
         # Save policy network
         with open(os.path.join(save_folder,
                 'policy-{0}.pt'.format(batch)), 'wb') as f:
-            torch.save(policy.state_dict(), f)
+            torch.save(policy, f)
 
     with open(os.path.join(save_folder, 'baseline.pt'), 'wb') as f:
-        torch.save(baseline.state_dict(), f)
+        torch.save(baseline, f)
 
 
 if __name__ == '__main__':

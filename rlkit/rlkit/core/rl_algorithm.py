@@ -228,7 +228,7 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
         if self._can_train():
             self.training_mode(True)
             for i in range(self.num_updates_per_train_call):
-                self._do_training()
+                self._do_training(i)
                 self._n_train_steps_total += 1
             self.training_mode(False)
 
@@ -477,7 +477,7 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
         return self.eval_sampler.obtain_samples()
 
     @abc.abstractmethod
-    def _do_training(self):
+    def _do_training(self, i):
         """
         Perform some update, e.g. perform one gradient step.
         :return:

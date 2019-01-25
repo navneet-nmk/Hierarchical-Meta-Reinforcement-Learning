@@ -52,6 +52,7 @@ def load_meta_learner_params(policy_path, baseline_path, env, num_layers=2):
 def evaluate(env, task, policy, policy_params,  max_path_length=100):
     cum_reward = 0
     t = 0
+    env.reset_task(task)
     obs = env.reset()
     for _ in range(max_path_length):
         obs_tensor = torch.from_numpy(obs).to(device='cpu').type(torch.FloatTensor)
@@ -84,7 +85,7 @@ def main():
                           )
     writer = SummaryWriter()
 
-    TEST_TASKS = {'direction': -1.0}
+    TEST_TASKS = {'direction': 0.5}
     num_updates = 5
 
     for i in range(ITR):
