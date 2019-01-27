@@ -1,15 +1,11 @@
-import numpy as np
 import torch
 
 from maml_rl.envs.mujoco.half_cheetah import HalfCheetahDirEnv
-from maml_rl.policies.normal_mlp import NormalMLPPolicy
-from maml_rl.baseline import LinearFeatureBaseline
 from maml_rl.sampler import BatchSampler
 from maml_rl.metalearner import MetaLearner
 from gym.utils import seeding
 
 from tensorboardX import SummaryWriter
-import numpy as np
 
 ITR = 120
 
@@ -34,29 +30,19 @@ def sample_tasks(num_tasks, seed=None):
 
 
 def load_meta_learner_params(policy_path, baseline_path, env, num_layers=2):
-    policy_params = torch.load(policy_path)
-    baseline_params = torch.load(baseline_path)
+    policy = torch.load(policy_path)
+    baseline = torch.load(baseline_path)
 
-    policy = NormalMLPPolicy(
-        int(np.prod(env.observation_space.shape)),
-        int(np.prod(env.action_space.shape)),
-        hidden_sizes=(100,) * num_layers)  # We should actually get this from config
-    policy.load_state_dict(policy_params)
-
-    baseline = LinearFeatureBaseline(int(np.prod(env.observation_space.shape)))
-    baseline.load_state_dict(baseline_params)
-
-    return policy, baseline, policy_params
+    return policy, baseline
 
 
-def evaluate(env, task, policy, policy_params,  max_path_length=100):
+def evaluate(env, policy, max_path_length=100):
     cum_reward = 0
     t = 0
-    env.reset_task(task)
     obs = env.reset()
     for _ in range(max_path_length):
         obs_tensor = torch.from_numpy(obs).to(device='cpu').type(torch.FloatTensor)
-        action_tensor = policy(obs_tensor, params=policy_params).sample()
+        action_tensor = policy(obs_tensor).sample()
         action = action_tensor.cpu().numpy()
         obs, rew, done, _ = env.step(action)
         cum_reward += rew
@@ -73,9 +59,9 @@ def evaluate(env, task, policy, policy_params,  max_path_length=100):
 
 def main():
     env = HalfCheetahDirEnv()
-    policy, baseline, params = load_meta_learner_params(META_POLICY_PATH, BASELINE_POLICY_PATH, env, )
+    policy, baseline = load_meta_learner_params(META_POLICY_PATH, BASELINE_POLICY_PATH, env)
     sampler = BatchSampler(env_name='HalfCheetahDir-v1',
-                           batch_size=20)
+                           batch_size=4000)
     gamma = 0.99
     fast_lr = 0.1
     tau = 1.0
@@ -85,20 +71,21 @@ def main():
                           )
     writer = SummaryWriter()
 
-    TEST_TASKS = {'direction': 0.5}
+    TEST_TASKS = {'direction': -1.0}
+    task = TEST_TASKS
+    print(task)
+    env.reset_task(task)
+    # Sample a batch of transitions
+    sampler.reset_task(task)
     num_updates = 5
+    num_tasks = 5
 
     for i in range(ITR):
-        task = TEST_TASKS
-        print(task)
-        env.reset_task(task)
-        # Sample a batch of transitions
-        sampler.reset_task(task)
+
         episodes = sampler.sample(policy)
         new_params = learner.adapt(episodes)
         policy.load_state_dict(new_params)
-        cum_reward = evaluate(env, task, policy, params)
-        writer.add_scalar('data/cumm_reward', cum_reward, i)
+        evaluate(env, task, policy)
 
 
 if __name__ == '__main__':
