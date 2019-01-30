@@ -148,7 +148,7 @@ if __name__ == '__main__':
         'Model-Agnostic Meta-Learning (MAML)')
 
     # General
-    parser.add_argument('--env-name', type=str, default='HalfCheetahDir-v1',
+    parser.add_argument('--env-name', type=str, default='HalfCheetahVel-v1',
         help='name of the environment')
     parser.add_argument('--gamma', type=float, default=0.99,
         help='value of the discount factor gamma')
@@ -186,7 +186,7 @@ if __name__ == '__main__':
         help='maximum number of iterations for line search')
 
     # Miscellaneous
-    parser.add_argument('--output-folder', type=str, default='maml-halfcheetah-dir',
+    parser.add_argument('--output-folder', type=str, default='maml-halfcheetah-vel',
         help='name of the output folder')
     parser.add_argument('--num-workers', type=int, default=mp.cpu_count() - 1,
         help='number of workers for trajectories sampling')

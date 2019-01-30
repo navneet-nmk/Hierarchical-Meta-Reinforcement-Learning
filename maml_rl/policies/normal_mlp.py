@@ -14,7 +14,7 @@ class NormalMLPPolicy(Policy):
     `HalfCheetahDir`). The code is adapted from 
     https://github.com/cbfinn/maml_rl/blob/9c8e2ebd741cb0c7b8bf2d040c4caeeb8e06cc95/sandbox/rocky/tf/policies/maml_minimal_gauss_mlp_policy.py
     """
-__init__(self, input_size, output_size, hidden_sizes=(),
+    def __init__(self, input_size, output_size, hidden_sizes=(),
                  nonlinearity=F.relu, init_std=1.0, min_std=1e-6):
         super(NormalMLPPolicy, self).__init__(
             input_size=input_size, output_size=output_size)
