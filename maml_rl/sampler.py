@@ -5,19 +5,20 @@ import multiprocessing as mp
 from maml_rl.envs.subproc_vec_env import SubprocVecEnv
 from maml_rl.episode import BatchEpisodes
 from maml_rl.envs.mujoco.pusher import PusherEnv
+from maml_rl.envs.normalized_env import normalize
 
 
 def make_env(env_name):
     def _make_env():
         if env_name is 'Pusher':
-            return PusherEnv()
+            return normalize(PusherEnv())
         else:
             return gym.make(env_name)
     return _make_env
 
 
 class BatchSampler(object):
-    def __init__(self, env_name, batch_size, num_workers=mp.cpu_count() - 1):
+    def __init__(self, env_name, batch_size, num_workers=mp.cpu_count() - 2):
         self.env_name = env_name
         self.batch_size = batch_size
         self.num_workers = num_workers
@@ -25,7 +26,7 @@ class BatchSampler(object):
         self.envs = SubprocVecEnv([make_env(env_name) for _ in range(num_workers)],
             queue=self.queue)
         if env_name is 'Pusher':
-            self._env = PusherEnv()
+            self._env = normalize(PusherEnv())
         else:
             self._env = gym.make(env_name)
 

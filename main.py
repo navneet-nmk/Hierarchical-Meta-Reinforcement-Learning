@@ -172,7 +172,7 @@ if __name__ == '__main__':
         help='learning rate for the 1-step gradient update of MAML')
 
     # Optimization
-    parser.add_argument('--num-batches', type=int, default=1000,
+    parser.add_argument('--num-batches', type=int, default=500,
         help='number of batches')
     parser.add_argument('--meta-batch-size', type=int, default=20,
         help='number of tasks per batch')
