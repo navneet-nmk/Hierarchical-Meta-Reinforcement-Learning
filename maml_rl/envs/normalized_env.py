@@ -175,3 +175,10 @@ class NormalizedRewardWrapper(gym.RewardWrapper):
         self._mean = (1.0 - self.alpha) * self._mean + self.alpha * reward
         self._var = (1.0 - self.alpha) * self._var + self.alpha * np.square(reward - self._mean)
         return (reward - self._mean) / (np.sqrt(self._var) + self.epsilon)
+
+
+def normalize_env(env):
+    n_env = NormalizedActionWrapper(env)
+    n_env = NormalizedObservationWrapper(n_env)
+    n_env = NormalizedRewardWrapper(n_env)
+    return n_env
