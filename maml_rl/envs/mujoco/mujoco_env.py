@@ -1,12 +1,15 @@
 import numpy as np
 import os.path as osp
 
-import mujoco_py
-from mujoco_py import MjModel, MjViewer
+from mujoco_py import MjViewer
 from gym import error, spaces
 from gym.utils import seeding
 
-import theano
+try:
+    import mujoco_py
+except ImportError as e:
+    raise error.DependencyNotInstalled("{}. (HINT: you need to install mujoco_py, and also perform the setup instructions here: https://github.com/openai/mujoco-py/.)".format(e))
+
 import tempfile
 import os
 import mako.template
@@ -22,8 +25,10 @@ MODEL_DIR = osp.abspath(
 
 BIG = 1e6
 
+
 def q_inv(a):
     return [a[0], -a[1], -a[2], -a[3]]
+
 
 def q_mult(a, b): # multiply two quaternion
     w = a[0]*b[0] - a[1]*b[1] - a[2]*b[2] - a[3]*b[3]
@@ -38,7 +43,9 @@ class MujocoEnv(gym.Env):
     FILE = None
 
     def __init__(self, action_noise=0.0,
-                 file_path=None, template_args=None, render_mode='human'):
+                 file_path=None, template_args=None,
+                 frame_skip=5,
+                 render_mode='human'):
         # compile template
         if file_path is None:
             if self.__class__.FILE is None:
@@ -55,33 +62,24 @@ class MujocoEnv(gym.Env):
             tmp_f, file_path = tempfile.mkstemp(text=True)
             with open(file_path, 'w') as f:
                 f.write(content)
-            self.model = MjModel(file_path)
+            self.model = mujoco_py.load_model_from_path(file_path)
             os.close(tmp_f)
         else:
-            self.model = MjModel(file_path)
-        self.data = self.model.data
+            self.model = mujoco_py.load_model_from_path(file_path)
+        self.sim = mujoco_py.MjSim(self.model)
+        self.data = self.sim.data
         self.viewer = None
-        self.init_qpos = self.model.data.qpos
-        self.init_qvel = self.model.data.qvel
-        self.init_qacc = self.model.data.qacc
-        self.init_ctrl = self.model.data.ctrl
+        self.init_qpos = self.sim.data.qpos.ravel().copy()
+        self.init_qvel = self.sim.data.qvel.ravel().copy()
+        self.init_qacc = self.sim.data.qacc.ravel().copy()
+        self.init_ctrl = self.sim.data.ctrl.ravel().copy()
         self.qpos_dim = self.init_qpos.size
         self.qvel_dim = self.init_qvel.size
         self.ctrl_dim = self.init_ctrl.size
         self.render_mode = render_mode
         self.action_noise = action_noise
-        if "frame_skip" in self.model.numeric_names:
-            frame_skip_id = self.model.numeric_names.index("frame_skip")
-            addr = self.model.numeric_adr.flat[frame_skip_id]
-            self.frame_skip = int(self.model.numeric_data.flat[addr])
-        else:
-            self.frame_skip = 1
-        if "init_qpos" in self.model.numeric_names:
-            init_qpos_id = self.model.numeric_names.index("init_qpos")
-            addr = self.model.numeric_adr.flat[init_qpos_id]
-            size = self.model.numeric_size.flat[init_qpos_id]
-            init_qpos = self.model.numeric_data.flat[addr:addr + size]
-            self.init_qpos = init_qpos
+
+        self.frame_skip = frame_skip
         self.dcom = None
         self.current_com = None
         self.reset()
@@ -89,7 +87,7 @@ class MujocoEnv(gym.Env):
 
     @property
     def action_space(self):
-        bounds = self.model.actuator_ctrlrange
+        bounds = self.model.actuator_ctrlrange.copy()
         lb = bounds[:, 0]
         ub = bounds[:, 1]
         return spaces.Box(lb, ub)
@@ -102,7 +100,7 @@ class MujocoEnv(gym.Env):
 
     @property
     def action_bounds(self):
-        return self.action_space.bounds
+        return (self.action_space.low, self.action_space.high)
 
     def reset_mujoco(self, init_state=None):
         if init_state is None:
@@ -132,7 +130,7 @@ class MujocoEnv(gym.Env):
         return self._get_full_obs()
 
     def _get_full_obs(self):
-        data = self.model.data
+        data = self.sim.data
         cdists = np.copy(self.model.geom_margin).flat
         for c in self.model.data.contact:
             cdists[c.geom2] = min(cdists[c.geom2], c.dist)
@@ -154,17 +152,17 @@ class MujocoEnv(gym.Env):
     @property
     def _state(self):
         return np.concatenate([
-            self.model.data.qpos.flat,
-            self.model.data.qvel.flat
+            self.sim.data.qpos.flat,
+            self.sim.data.qvel.flat
         ])
 
     @property
     def _full_state(self):
         return np.concatenate([
-            self.model.data.qpos,
-            self.model.data.qvel,
-            self.model.data.qacc,
-            self.model.data.ctrl,
+            self.sim.data.qpos,
+            self.sim.data.qvel,
+            self.sim.data.qacc,
+            self.sim.data.ctrl,
         ]).ravel()
 
     def inject_action_noise(self, action):
@@ -177,24 +175,37 @@ class MujocoEnv(gym.Env):
         return action + noise
 
     def forward_dynamics(self, action):
-        self.model.data.ctrl = self.inject_action_noise(action)
+        self.sim.data.ctrl[:] = self.inject_action_noise(action)
         for _ in range(self.frame_skip):
-            self.model.step()
-        self.model.forward()
-        new_com = self.model.data.com_subtree[0]
-        self.dcom = new_com - self.current_com
-        self.current_com = new_com
+            self.sim.step()
+        self.sim.forward()
 
-    def get_viewer(self):
+    def viewer_setup(self):
+        """
+        This method is called when the viewer is initialized and after every reset
+        Optionally implement this method, if you need to tinker with camera position
+        and so forth.
+        """
+        pass
+
+    # -----------------------------
+
+    def _get_viewer(self):
         if self.viewer is None:
-            self.viewer = MjViewer()
-            self.viewer.start()
-            self.viewer.set_model(self.model)
+            self.viewer = mujoco_py.MjViewer(self.sim)
+            self.viewer_setup()
         return self.viewer
 
     def render(self, mode='human'):
-        viewer = self.get_viewer()
-        viewer.loop_once()
+        if mode == 'rgb_array':
+            self._get_viewer().render()
+            # window size used for old mujoco-py:
+            width, height = 500, 500
+            data = self._get_viewer().read_pixels(width, height, depth=False)
+            # original image is upside-down, so flip it
+            return data[::-1, :, :]
+        elif mode == 'human':
+            self._get_viewer().render()
 
     def start_viewer(self):
         viewer = self.get_viewer()
@@ -210,9 +221,15 @@ class MujocoEnv(gym.Env):
         return self.model.data.xmat[idx].reshape((3, 3))
 
     def get_body_com(self, body_name):
-        idx = self.model.body_names.index(body_name)
-        return self.model.data.com_subtree[idx]
+        return self.data.get_body_xpos(body_name)
 
     def get_body_comvel(self, body_name):
-        idx = self.model.body_names.index(body_name)
-        return self.model.body_comvels[idx]
+        return self.data.get_bocy_comvels(body_name)
+
+    def set_state(self, qpos, qvel):
+        assert qpos.shape == (self.model.nq,) and qvel.shape == (self.model.nv,)
+        old_state = self.sim.get_state()
+        new_state = mujoco_py.MjSimState(old_state.time, qpos, qvel,
+                                         old_state.act, old_state.udd_state)
+        self.sim.set_state(new_state)
+        self.sim.forward()

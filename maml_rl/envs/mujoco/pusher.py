@@ -1,4 +1,4 @@
-from .mujoco_env import MujocoEnv
+from mujoco_env import MujocoEnv
 import numpy as np
 import pickle
 from gym import utils
@@ -37,7 +37,9 @@ def save_goal_samples(num_tasks, filename):
 class PusherEnv(MujocoEnv, utils.EzPickle):
     """
     Pusher Environment adapted from the MAESN repository.
-    
+
+    Has support for both a sparse reward and a dense reward.
+
     """
 
     FILE = 'pusher_env.xml'
@@ -51,15 +53,11 @@ class PusherEnv(MujocoEnv, utils.EzPickle):
             assert sparse is True
             self.all_goals = pickle.load(open('/Users/navneetmadhukumar/Downloads/pytorch-maml-rl/maml_rl/envs/goals/pusher_valSet.pkl', 'rb'))
         self.sparse = sparse
-        #all_goals = pickle.load(open("/home/russellm/generativemodel_tasks/maml_rl_fullversion/rllab/envs/mujoco/pusher_trainSet_100Tasks.pkl", "rb"))
         super(PusherEnv, self).__init__()
         utils.EzPickle.__init__(self)
 
     def sample_goals(self, num_goals):
         return np.array([np.random.randint(0, num_goals*5) for i in range(num_goals)])
-
-       #return np.asarray(range(num_goals))
-       # return np.random.choice(range(num_tasks*5), size=(num_goals,))
 
     def reset(self, reset_args=None):
         choice = reset_args
@@ -77,16 +75,12 @@ class PusherEnv(MujocoEnv, utils.EzPickle):
         body_pos = self.model.body_pos.copy()
         body_pos[-1][0] = goal_pos[0]
         body_pos[-1][1] = goal_pos[1]
-        self.model.body_pos = body_pos
         curr_qpos = blockpositions
-        self.model.data.qpos = curr_qpos
 
-        curr_qvel = self.model.data.qvel.copy()
+        curr_qvel = self.sim.data.qvel.copy()
         curr_qvel = np.zeros_like(curr_qvel)
-        self.model.data.qvel = curr_qvel
-        self.model.forward()
-        self.current_com = self.model.data.com_subtree[0]
-        self.dcom = np.zeros_like(self.current_com)
+        self.set_state(curr_qpos, curr_qvel)
+        self.sim.forward()
         obs = self.get_current_obs()
         # for i in range(10):
         #     self.model.step()
@@ -94,9 +88,9 @@ class PusherEnv(MujocoEnv, utils.EzPickle):
 
     def get_current_obs(self):
         return np.concatenate([
-            self.model.data.qpos.flat[:3],
-            self.model.data.geom_xpos[-6:-1, :2].flat,
-            self.model.data.qvel.flat,
+            self.sim.data.qpos.flat[:3],
+            self.sim.data.geom_xpos[-6:-1, :2].flat,
+            self.sim.data.qvel.flat,
         ]).reshape(-1)
 
     def step(self, action):
@@ -105,11 +99,10 @@ class PusherEnv(MujocoEnv, utils.EzPickle):
         blockchoice = self.goal[0]
         curr_block_xidx = int(3 + 2*blockchoice)
         curr_block_yidx = int(4 + 2*blockchoice)
-        #TODO: Maybe need to change angle here
-        curr_gripper_pos = self.model.data.site_xpos[0, :2]
-        curr_block_pos =  np.array([next_obs[curr_block_xidx], next_obs[curr_block_yidx]])
+        curr_gripper_pos = self.sim.data.site_xpos[0, :2]
+        curr_block_pos = np.array([next_obs[curr_block_xidx], next_obs[curr_block_yidx]])
         goal_pos = self.goal[1:3]
-        dist_to_block = np.linalg.norm(curr_gripper_pos -  curr_block_pos)
+        dist_to_block = np.linalg.norm(curr_gripper_pos - curr_block_pos)
         block_dist = np.linalg.norm(goal_pos - curr_block_pos)
         goal_dist = np.linalg.norm(goal_pos)
         
@@ -122,17 +115,13 @@ class PusherEnv(MujocoEnv, utils.EzPickle):
         return next_obs, reward, done, info
 
 
-# if __name__ == "__main__":
-#     env = PusherEnvRandomized()
-#     env.reset()
-#     env.step(np.zeros(3))
-#     env.render()
-#     import IPython
-#     IPython.embed()
-
 if __name__ == '__main__':
     # Testing the new environment
     env = PusherEnv()
     env.reset()
-    next_obs, reward, done, info = env.step(np.zeros(3))
-    print('Observation', str(next_obs))
+    env.render()
+    num_simulation_steps = 100
+    for _ in range(num_simulation_steps):
+        next_obs, reward, done, info = env.step(env.action_space.sample())
+        if done:
+            env.reset()
