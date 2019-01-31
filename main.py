@@ -125,6 +125,7 @@ def main(args):
             cg_damping=args.cg_damping, ls_max_steps=args.ls_max_steps,
             ls_backtrack_ratio=args.ls_backtrack_ratio)
 
+        print(total_rewards([ep.rewards for _, ep in episodes]))
         # Tensorboard
         writer.add_scalar('total_rewards/before_update',
             total_rewards([ep.rewards for ep, _ in episodes]), batch)
@@ -195,7 +196,7 @@ if __name__ == '__main__':
         help='set the device (cpu or cuda)')
 
     args = parser.parse_args()
-    print("Using ",str(mp.cpu_count()-1), " number of workers")
+    print("Using ", str(mp.cpu_count()-1), " number of workers")
 
     # Create logs and saves folder if they don't exist
     if not os.path.exists('./logs'):
