@@ -164,10 +164,12 @@ if __name__ == '__main__':
         help='number of hidden layers')
 
     # Task-specific
-    parser.add_argument('--fast-batch-size', type=int, default=20,
+    parser.add_argument('--fast-batch-size', type=int, default=50,
         help='batch size for each individual task')
     parser.add_argument('--fast-lr', type=float, default=0.1,
         help='learning rate for the 1-step gradient update of MAML')
+    parser.add_argument('--max-path-length', type=int, default=100,
+                        help='Maximum lenght of a single rollout')
 
     # Optimization
     parser.add_argument('--num-batches', type=int, default=500,
@@ -188,13 +190,13 @@ if __name__ == '__main__':
     # Miscellaneous
     parser.add_argument('--output-folder', type=str, default='maml-pusher',
         help='name of the output folder')
-    parser.add_argument('--num-workers', type=int, default=mp.cpu_count() - 2,
+    parser.add_argument('--num-workers', type=int, default=mp.cpu_count() - 1,
         help='number of workers for trajectories sampling')
     parser.add_argument('--device', type=str, default='cpu',
         help='set the device (cpu or cuda)')
 
     args = parser.parse_args()
-    print("Using ", str(mp.cpu_count()-2), " number of workers")
+    print("Using ", str(mp.cpu_count()-1), " number of workers")
 
     # Create logs and saves folder if they don't exist
     if not os.path.exists('./logs'):

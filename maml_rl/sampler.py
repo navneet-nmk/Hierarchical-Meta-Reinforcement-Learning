@@ -18,10 +18,14 @@ def make_env(env_name):
 
 
 class BatchSampler(object):
-    def __init__(self, env_name, batch_size, num_workers=mp.cpu_count() - 2):
+    def __init__(self, env_name,
+                 batch_size,
+                 max_path_length=100,
+                 num_workers=mp.cpu_count() - 1):
         self.env_name = env_name
-        self.batch_size = batch_size
+        self.batch_size = batch_size*max_path_length
         self.num_workers = num_workers
+        self.max_path_length = max_path_length
         self.queue = mp.Queue()
         self.envs = SubprocVecEnv([make_env(env_name) for _ in range(num_workers)],
             queue=self.queue)
@@ -38,6 +42,7 @@ class BatchSampler(object):
             self.queue.put(None)
         observations, batch_ids = self.envs.reset()
         dones = [False]
+        num_samples = 0
         while (not all(dones)) or (not self.queue.empty()):
             with torch.no_grad():
                 observations_tensor = torch.from_numpy(observations).to(device=device)
@@ -47,6 +52,10 @@ class BatchSampler(object):
             new_observations, rewards, dones, new_batch_ids, _ = self.envs.step(actions)
             episodes.append(observations, actions, rewards, batch_ids)
             observations, batch_ids = new_observations, new_batch_ids
+            num_samples += observations.shape[0]
+
+            if num_samples >= self.batch_size:
+                break
         return episodes
 
     def reset_task(self, task):

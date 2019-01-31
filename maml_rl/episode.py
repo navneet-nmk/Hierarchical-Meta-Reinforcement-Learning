@@ -2,11 +2,15 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
+
 class BatchEpisodes(object):
-    def __init__(self, batch_size, gamma=0.95, device='cpu'):
+    def __init__(self, batch_size,
+                 num_workers=3,
+                 gamma=0.95, device='cpu'):
         self.batch_size = batch_size
         self.gamma = gamma
         self.device = device
+        self.num_workers = num_workers
 
         self._observations_list = [[] for _ in range(batch_size)]
         self._actions_list = [[] for _ in range(batch_size)]
@@ -25,7 +29,7 @@ class BatchEpisodes(object):
             observation_shape = self._observations_list[0][0].shape
             observations = np.zeros((len(self), self.batch_size)
                 + observation_shape, dtype=np.float32)
-            for i in range(self.batch_size):
+            for i in range(self.num_workers):
                 length = len(self._observations_list[i])
                 observations[:length, i] = np.stack(self._observations_list[i], axis=0)
             self._observations = torch.from_numpy(observations).to(self.device)
@@ -37,7 +41,7 @@ class BatchEpisodes(object):
             action_shape = self._actions_list[0][0].shape
             actions = np.zeros((len(self), self.batch_size)
                 + action_shape, dtype=np.float32)
-            for i in range(self.batch_size):
+            for i in range(self.num_workers):
                 length = len(self._actions_list[i])
                 actions[:length, i] = np.stack(self._actions_list[i], axis=0)
             self._actions = torch.from_numpy(actions).to(self.device)
@@ -47,7 +51,7 @@ class BatchEpisodes(object):
     def rewards(self):
         if self._rewards is None:
             rewards = np.zeros((len(self), self.batch_size), dtype=np.float32)
-            for i in range(self.batch_size):
+            for i in range(self.num_workers):
                 length = len(self._rewards_list[i])
                 rewards[:length, i] = np.stack(self._rewards_list[i], axis=0)
             self._rewards = torch.from_numpy(rewards).to(self.device)
@@ -70,7 +74,7 @@ class BatchEpisodes(object):
     def mask(self):
         if self._mask is None:
             mask = np.zeros((len(self), self.batch_size), dtype=np.float32)
-            for i in range(self.batch_size):
+            for i in range(self.num_workers):
                 length = len(self._actions_list[i])
                 mask[:length, i] = 1.0
             self._mask = torch.from_numpy(mask).to(self.device)
