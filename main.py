@@ -119,11 +119,9 @@ def main(args):
     for batch in range(args.num_batches):
         tasks = sampler.sample_tasks(num_tasks=args.meta_batch_size)
         episodes = metalearner.sample(tasks, first_order=args.first_order)
-        print(episodes.shape)
         metalearner.step(episodes, max_kl=args.max_kl, cg_iters=args.cg_iters,
             cg_damping=args.cg_damping, ls_max_steps=args.ls_max_steps,
             ls_backtrack_ratio=args.ls_backtrack_ratio)
-        print(total_rewards([ep.rewards for _, ep in episodes]))
         # Tensorboard
         writer.add_scalar('total_rewards/before_update',
             total_rewards([ep.rewards for ep, _ in episodes]), batch)
