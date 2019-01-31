@@ -2,8 +2,7 @@ from maml_rl.envs.mujoco.mujoco_env import MujocoEnv
 import numpy as np
 import pickle
 from gym import utils
-
-#num_tasks = 20
+from maml_rl.serializable import Serializable
 
 
 def save_goal_samples(num_tasks, filename):
@@ -34,7 +33,7 @@ def save_goal_samples(num_tasks, filename):
     return np.asarray(all_goals)
 
 
-class PusherEnv(MujocoEnv, utils.EzPickle):
+class PusherEnv(MujocoEnv, Serializable):
     """
     Pusher Environment adapted from the MAESN repository.
 
@@ -44,7 +43,7 @@ class PusherEnv(MujocoEnv, utils.EzPickle):
 
     FILE = 'pusher_env.xml'
 
-    def __init__(self, choice=None, sparse=False , train=True):
+    def __init__(self, choice=None, sparse=False, train=True):
         self.choice = choice
         if train:
             assert sparse is False
@@ -54,7 +53,6 @@ class PusherEnv(MujocoEnv, utils.EzPickle):
             self.all_goals = pickle.load(open('/Users/navneetmadhukumar/Downloads/pytorch-maml-rl/maml_rl/envs/goals/pusher_valSet.pkl', 'rb'))
         self.sparse = sparse
         super(PusherEnv, self).__init__()
-        utils.EzPickle.__init__(self)
 
     def sample_tasks(self, num_goals):
         return np.array([np.random.randint(0, num_goals) for i in range(num_goals)])

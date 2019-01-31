@@ -5,54 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
       <change beforePath="$PROJECT_DIR$/maml_rl/envs/mujoco/pusher.py" afterPath="$PROJECT_DIR$/maml_rl/envs/mujoco/pusher.py" />
-      <change beforePath="$PROJECT_DIR$/maml_rl/metalearner.py" afterPath="$PROJECT_DIR$/maml_rl/metalearner.py" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_09-44-03_Navneets-MacBook-Pro.local/events.out.tfevents.1548233043.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_09-44-26_Navneets-MacBook-Pro.local/events.out.tfevents.1548233066.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_09-47-12_Navneets-MacBook-Pro.local/events.out.tfevents.1548233232.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_09-51-07_Navneets-MacBook-Pro.local/events.out.tfevents.1548233467.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_09-51-57_Navneets-MacBook-Pro.local/events.out.tfevents.1548233517.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_09-53-59_Navneets-MacBook-Pro.local/events.out.tfevents.1548233639.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_09-54-55_Navneets-MacBook-Pro.local/events.out.tfevents.1548233695.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_09-55-48_Navneets-MacBook-Pro.local/events.out.tfevents.1548233748.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_09-59-03_Navneets-MacBook-Pro.local/events.out.tfevents.1548233943.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_10-01-58_Navneets-MacBook-Pro.local/events.out.tfevents.1548234118.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_10-02-09_Navneets-MacBook-Pro.local/events.out.tfevents.1548234129.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_10-03-54_Navneets-MacBook-Pro.local/events.out.tfevents.1548234234.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_10-04-24_Navneets-MacBook-Pro.local/events.out.tfevents.1548234264.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_10-05-25_Navneets-MacBook-Pro.local/events.out.tfevents.1548234325.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_10-05-41_Navneets-MacBook-Pro.local/events.out.tfevents.1548234341.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_10-05-50_Navneets-MacBook-Pro.local/events.out.tfevents.1548234350.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_10-06-25_Navneets-MacBook-Pro.local/events.out.tfevents.1548234385.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_10-07-11_Navneets-MacBook-Pro.local/events.out.tfevents.1548234431.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan23_10-08-00_Navneets-MacBook-Pro.local/events.out.tfevents.1548234480.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_09-36-21_Navneets-MacBook-Pro.local/events.out.tfevents.1548405381.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_09-36-55_Navneets-MacBook-Pro.local/events.out.tfevents.1548405415.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_09-37-35_Navneets-MacBook-Pro.local/events.out.tfevents.1548405455.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_09-38-15_Navneets-MacBook-Pro.local/events.out.tfevents.1548405495.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_09-39-40_Navneets-MacBook-Pro.local/events.out.tfevents.1548405580.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_09-40-44_Navneets-MacBook-Pro.local/events.out.tfevents.1548405644.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_09-41-42_Navneets-MacBook-Pro.local/events.out.tfevents.1548405702.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_09-46-18_Navneets-MacBook-Pro.local/events.out.tfevents.1548405978.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_09-56-38_Navneets-MacBook-Pro.local/events.out.tfevents.1548406598.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_09-57-42_Navneets-MacBook-Pro.local/events.out.tfevents.1548406662.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_10-01-03_Navneets-MacBook-Pro.local/events.out.tfevents.1548406863.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_10-09-13_Navneets-MacBook-Pro.local/events.out.tfevents.1548407353.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_10-13-19_Navneets-MacBook-Pro.local/events.out.tfevents.1548407599.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan25_10-13-52_Navneets-MacBook-Pro.local/events.out.tfevents.1548407632.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_10-40-09_Navneets-MacBook-Pro.local/events.out.tfevents.1548582009.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_10-41-36_Navneets-MacBook-Pro.local/events.out.tfevents.1548582096.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_10-48-13_Navneets-MacBook-Pro.local/events.out.tfevents.1548582493.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_10-50-11_Navneets-MacBook-Pro.local/events.out.tfevents.1548582611.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_10-50-55_Navneets-MacBook-Pro.local/events.out.tfevents.1548582655.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_10-51-38_Navneets-MacBook-Pro.local/events.out.tfevents.1548582698.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_11-09-16_Navneets-MacBook-Pro.local/events.out.tfevents.1548583756.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_11-09-33_Navneets-MacBook-Pro.local/events.out.tfevents.1548583773.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_11-14-29_Navneets-MacBook-Pro.local/events.out.tfevents.1548584069.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_11-15-36_Navneets-MacBook-Pro.local/events.out.tfevents.1548584136.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_11-18-37_Navneets-MacBook-Pro.local/events.out.tfevents.1548584317.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_11-22-48_Navneets-MacBook-Pro.local/events.out.tfevents.1548584568.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_11-42-39_Navneets-MacBook-Pro.local/events.out.tfevents.1548585759.Navneets-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/runs/Jan27_11-43-36_Navneets-MacBook-Pro.local/events.out.tfevents.1548585816.Navneets-MacBook-Pro.local" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -63,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="pusher.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pusher.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/maml_rl/envs/mujoco/pusher.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="873">
-              <caret line="59" column="55" lean-forward="false" selection-start-line="59" selection-start-column="55" selection-end-line="59" selection-end-column="55" />
+            <state relative-caret-position="-607">
+              <caret line="35" column="39" lean-forward="false" selection-start-line="35" selection-start-column="39" selection-end-line="35" selection-end-column="39" />
               <folding>
                 <element signature="e#0#52#0" expanded="true" />
               </folding>
@@ -75,21 +27,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="subproc_vec_env.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/maml_rl/envs/subproc_vec_env.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="177" column="66" lean-forward="false" selection-start-line="177" selection-start-column="66" selection-end-line="177" selection-end-column="66" />
+            <state relative-caret-position="-971">
+              <caret line="121" column="68" lean-forward="false" selection-start-line="121" selection-start-column="68" selection-end-line="121" selection-end-column="68" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -97,11 +39,63 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="half_cheetah.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/anaconda3/envs/rllab3/lib/python3.5/site-packages/gym/envs/mujoco/half_cheetah.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="52" lean-forward="false" selection-start-line="4" selection-start-column="52" selection-end-line="4" selection-end-column="52" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ezpickle.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/anaconda3/envs/rllab3/lib/python3.5/site-packages/gym/utils/ezpickle.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="6" lean-forward="false" selection-start-line="0" selection-start-column="6" selection-end-line="0" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sampler.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/maml_rl/sampler.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="267">
+              <caret line="42" column="65" lean-forward="false" selection-start-line="42" selection-start-column="65" selection-end-line="42" selection-end-column="65" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="episode.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/maml_rl/episode.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="5" column="8" lean-forward="false" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="registration.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/anaconda3/envs/rllab3/lib/python3.5/site-packages/gym/envs/registration.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="266">
+              <caret line="168" column="13" lean-forward="false" selection-start-line="168" selection-start-column="13" selection-end-line="168" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="metalearner.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/maml_rl/metalearner.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="81" column="72" lean-forward="false" selection-start-line="81" selection-start-column="72" selection-end-line="81" selection-end-column="72" />
+            <state relative-caret-position="-484">
+              <caret line="31" column="23" lean-forward="false" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -163,11 +157,12 @@
         <option value="$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py" />
         <option value="$PROJECT_DIR$/maml_rl/policies/normal_mlp.py" />
         <option value="$PROJECT_DIR$/t_maml_rl.py" />
-        <option value="$PROJECT_DIR$/maml_rl/sampler.py" />
         <option value="$PROJECT_DIR$/maml_rl/envs/mujoco/mujoco_env.py" />
-        <option value="$PROJECT_DIR$/maml_rl/envs/mujoco/pusher.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/maml_rl/metalearner.py" />
+        <option value="$PROJECT_DIR$/maml_rl/serializable.py" />
+        <option value="$PROJECT_DIR$/maml_rl/envs/mujoco/pusher.py" />
+        <option value="$PROJECT_DIR$/maml_rl/sampler.py" />
+        <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
@@ -209,6 +204,24 @@
               <item name="pytorch-maml-rl" type="b2602c69:ProjectViewProjectNode" />
               <item name="pytorch-maml-rl" type="462c0819:PsiDirectoryNode" />
               <item name="maml_rl" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pytorch-maml-rl" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pytorch-maml-rl" type="462c0819:PsiDirectoryNode" />
+              <item name="maml_rl" type="462c0819:PsiDirectoryNode" />
+              <item name="envs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pytorch-maml-rl" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pytorch-maml-rl" type="462c0819:PsiDirectoryNode" />
+              <item name="maml_rl" type="462c0819:PsiDirectoryNode" />
+              <item name="envs" type="462c0819:PsiDirectoryNode" />
+              <item name="mujoco" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pytorch-maml-rl" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pytorch-maml-rl" type="462c0819:PsiDirectoryNode" />
+              <item name="saves" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -378,8 +391,8 @@
     <layout>
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28470588" sideWeight="0.10208333" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28470588" sideWeight="0.8979167" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32588235" sideWeight="0.10694444" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32588235" sideWeight="0.89305556" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -405,50 +418,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/maml_rl/policies/categorical_mlp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#12#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/maml_rl/utils/reinforcement_learning.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/maml_rl/envs/mujoco/ant.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="31" lean-forward="true" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/anaconda3/envs/rllab3/lib/python3.5/site-packages/gym/envs/mujoco/ant.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="30" lean-forward="true" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#18#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/maml_rl/envs/mujoco/ant_env_rand_goal_ring.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#33#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_assets/halfcheetahdir.gif">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -509,6 +478,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="11" lean-forward="false" selection-start-line="8" selection-start-column="11" selection-end-line="8" selection-end-column="11" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -530,6 +500,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="11" lean-forward="false" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -537,6 +508,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -568,6 +540,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3355">
           <caret line="195" column="34" lean-forward="false" selection-start-line="195" selection-start-column="34" selection-end-line="195" selection-end-column="34" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -619,6 +592,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="6" column="11" lean-forward="false" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -645,6 +619,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="16" column="8" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -730,37 +705,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/anaconda3/envs/rllab3/lib/python3.5/site-packages/gym/envs/mujoco/half_cheetah.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="4" column="35" lean-forward="false" selection-start-line="4" selection-start-column="35" selection-end-line="4" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/maml_rl/envs/mujoco/half_cheetah.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="3" column="31" lean-forward="false" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/anaconda3/envs/rllab3/lib/python3.5/site-packages/torch/nn/functional.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
           <caret line="1351" column="0" lean-forward="false" selection-start-line="1351" selection-start-column="0" selection-end-line="1351" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/maml_rl/sampler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="56" column="41" lean-forward="false" selection-start-line="56" selection-start-column="41" selection-end-line="56" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#10#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -788,30 +737,96 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$USER_HOME$/anaconda3/envs/rllab3/lib/python3.5/site-packages/gym/envs/registration.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="177" column="66" lean-forward="false" selection-start-line="177" selection-start-column="66" selection-end-line="177" selection-end-column="66" />
+        <state relative-caret-position="266">
+          <caret line="168" column="13" lean-forward="false" selection-start-line="168" selection-start-column="13" selection-end-line="168" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/maml_rl/episode.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="5" column="8" lean-forward="false" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/maml_rl/serializable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="45" column="18" lean-forward="false" selection-start-line="45" selection-start-column="18" selection-end-line="45" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda3/envs/rllab3/lib/python3.5/site-packages/gym/utils/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda3/envs/rllab3/lib/python3.5/site-packages/gym/envs/mujoco/half_cheetah.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="52" lean-forward="false" selection-start-line="4" selection-start-column="52" selection-end-line="4" selection-end-column="52" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda3/envs/rllab3/lib/python3.5/site-packages/gym/utils/ezpickle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="6" lean-forward="false" selection-start-line="0" selection-start-column="6" selection-end-line="0" selection-end-column="6" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/maml_rl/metalearner.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="81" column="72" lean-forward="false" selection-start-line="81" selection-start-column="72" selection-end-line="81" selection-end-column="72" />
+        <state relative-caret-position="-484">
+          <caret line="31" column="23" lean-forward="false" selection-start-line="31" selection-start-column="23" selection-end-line="31" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/maml_rl/sampler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="267">
+          <caret line="42" column="65" lean-forward="false" selection-start-line="42" selection-start-column="65" selection-end-line="42" selection-end-column="65" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/maml_rl/envs/mujoco/half_cheetah.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="3" column="31" lean-forward="false" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/maml_rl/envs/mujoco/pusher.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="873">
-          <caret line="59" column="55" lean-forward="false" selection-start-line="59" selection-start-column="55" selection-end-line="59" selection-end-column="55" />
+        <state relative-caret-position="-607">
+          <caret line="35" column="39" lean-forward="false" selection-start-line="35" selection-start-column="39" selection-end-line="35" selection-end-column="39" />
           <folding>
             <element signature="e#0#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-971">
+          <caret line="121" column="68" lean-forward="false" selection-start-line="121" selection-start-column="68" selection-end-line="121" selection-end-column="68" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -125,7 +125,6 @@ def main(args):
         metalearner.step(episodes, max_kl=args.max_kl, cg_iters=args.cg_iters,
             cg_damping=args.cg_damping, ls_max_steps=args.ls_max_steps,
             ls_backtrack_ratio=args.ls_backtrack_ratio)
-
         print(total_rewards([ep.rewards for _, ep in episodes]))
         # Tensorboard
         writer.add_scalar('total_rewards/before_update',
@@ -175,7 +174,7 @@ if __name__ == '__main__':
     # Optimization
     parser.add_argument('--num-batches', type=int, default=1000,
         help='number of batches')
-    parser.add_argument('--meta-batch-size', type=int, default=100,
+    parser.add_argument('--meta-batch-size', type=int, default=20,
         help='number of tasks per batch')
     parser.add_argument('--max-kl', type=float, default=1e-2,
         help='maximum value for the KL constraint in TRPO')
@@ -191,13 +190,13 @@ if __name__ == '__main__':
     # Miscellaneous
     parser.add_argument('--output-folder', type=str, default='maml-pusher',
         help='name of the output folder')
-    parser.add_argument('--num-workers', type=int, default=mp.cpu_count() - 1,
+    parser.add_argument('--num-workers', type=int, default=mp.cpu_count() - 2,
         help='number of workers for trajectories sampling')
     parser.add_argument('--device', type=str, default='cpu',
         help='set the device (cpu or cuda)')
 
     args = parser.parse_args()
-    print("Using ", str(mp.cpu_count()-1), " number of workers")
+    print("Using ", str(mp.cpu_count()-2), " number of workers")
 
     # Create logs and saves folder if they don't exist
     if not os.path.exists('./logs'):
