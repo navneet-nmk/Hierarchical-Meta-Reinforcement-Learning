@@ -13,8 +13,9 @@ from rlkit.rlkit.torch.sac.policies import TanhGaussianPolicy
 from rlkit.rlkit.torch.networks import FlattenMlp
 
 from tensorboardX import SummaryWriter
-import sys
-print(sys.path)
+
+import warnings
+warnings.filterwarnings("ignore")
 
 torch.manual_seed(7)
 seed = 7
@@ -88,7 +89,7 @@ def hierarchical_meta_policy(env, skills_dim, sampler, output_size, net_size):
 def main(args):
     continuous_actions = (args.env_name in ['AntVel-v1', 'AntDir-v1',
         'AntPos-v0', 'HalfCheetahVel-v1', 'HalfCheetahDir-v1',
-        '2DNavigation-v0'])
+        '2DNavigation-v0', 'Pusher'])
 
     writer = SummaryWriter('./logs/{0}'.format(args.output_folder))
     save_folder = './saves/{0}'.format(args.output_folder)
@@ -148,7 +149,7 @@ if __name__ == '__main__':
         'Model-Agnostic Meta-Learning (MAML)')
 
     # General
-    parser.add_argument('--env-name', type=str, default='HalfCheetahVel-v1',
+    parser.add_argument('--env-name', type=str, default='Pusher',
         help='name of the environment')
     parser.add_argument('--gamma', type=float, default=0.99,
         help='value of the discount factor gamma')
@@ -186,7 +187,7 @@ if __name__ == '__main__':
         help='maximum number of iterations for line search')
 
     # Miscellaneous
-    parser.add_argument('--output-folder', type=str, default='maml-halfcheetah-vel',
+    parser.add_argument('--output-folder', type=str, default='maml-pusher',
         help='name of the output folder')
     parser.add_argument('--num-workers', type=int, default=mp.cpu_count() - 1,
         help='number of workers for trajectories sampling')
