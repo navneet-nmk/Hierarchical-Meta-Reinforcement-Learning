@@ -1,4 +1,4 @@
-from mujoco_env import MujocoEnv
+from maml_rl.envs.mujoco.mujoco_env import MujocoEnv
 import numpy as np
 import pickle
 from gym import utils
@@ -44,7 +44,7 @@ class PusherEnv(MujocoEnv, utils.EzPickle):
 
     FILE = 'pusher_env.xml'
 
-    def __init__(self, choice=None, sparse = False , train = True):
+    def __init__(self, choice=None, sparse=False , train=True):
         self.choice = choice
         if train:
             assert sparse is False
@@ -56,8 +56,11 @@ class PusherEnv(MujocoEnv, utils.EzPickle):
         super(PusherEnv, self).__init__()
         utils.EzPickle.__init__(self)
 
-    def sample_goals(self, num_goals):
+    def sample_tasks(self, num_goals):
         return np.array([np.random.randint(0, num_goals*5) for i in range(num_goals)])
+
+    def reset_task(self, task):
+        goal_task = task
 
     def reset(self, reset_args=None):
         choice = reset_args
