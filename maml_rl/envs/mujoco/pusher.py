@@ -1,7 +1,6 @@
 from maml_rl.envs.mujoco.mujoco_env import MujocoEnv
 import numpy as np
 import pickle
-from gym import utils
 from maml_rl.serializable import Serializable
 
 

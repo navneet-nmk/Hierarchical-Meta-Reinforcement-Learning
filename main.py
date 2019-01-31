@@ -1,5 +1,3 @@
-import maml_rl.envs
-import gym
 import numpy as np
 import torch
 import json
