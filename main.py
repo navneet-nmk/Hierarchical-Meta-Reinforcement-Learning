@@ -121,6 +121,7 @@ def main(args):
     for batch in range(args.num_batches):
         tasks = sampler.sample_tasks(num_tasks=args.meta_batch_size)
         episodes = metalearner.sample(tasks, first_order=args.first_order)
+        print(episodes.shape)
         metalearner.step(episodes, max_kl=args.max_kl, cg_iters=args.cg_iters,
             cg_damping=args.cg_damping, ls_max_steps=args.ls_max_steps,
             ls_backtrack_ratio=args.ls_backtrack_ratio)
@@ -174,7 +175,7 @@ if __name__ == '__main__':
     # Optimization
     parser.add_argument('--num-batches', type=int, default=1000,
         help='number of batches')
-    parser.add_argument('--meta-batch-size', type=int, default=40,
+    parser.add_argument('--meta-batch-size', type=int, default=100,
         help='number of tasks per batch')
     parser.add_argument('--max-kl', type=float, default=1e-2,
         help='maximum value for the KL constraint in TRPO')

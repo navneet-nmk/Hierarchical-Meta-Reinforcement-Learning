@@ -80,7 +80,6 @@ class MetaLearner(object):
                 gamma=self.gamma, device=self.device)
 
             params = self.adapt(train_episodes, first_order=first_order)
-
             valid_episodes = self.sampler.sample(self.policy, params=params,
                 gamma=self.gamma, device=self.device)
             episodes.append((train_episodes, valid_episodes))

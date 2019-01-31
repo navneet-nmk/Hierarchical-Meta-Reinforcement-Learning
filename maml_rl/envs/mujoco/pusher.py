@@ -57,10 +57,10 @@ class PusherEnv(MujocoEnv, utils.EzPickle):
         utils.EzPickle.__init__(self)
 
     def sample_tasks(self, num_goals):
-        return np.array([np.random.randint(0, num_goals*5) for i in range(num_goals)])
+        return np.array([np.random.randint(0, num_goals) for i in range(num_goals)])
 
     def reset_task(self, task):
-        goal_task = task
+        self.choice = task
 
     def reset(self, reset_args=None):
         choice = reset_args
