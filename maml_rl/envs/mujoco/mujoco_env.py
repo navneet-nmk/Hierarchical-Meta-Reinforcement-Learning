@@ -16,7 +16,7 @@ import gym
 MODEL_DIR = osp.abspath(
     osp.join(
         osp.dirname(__file__),
-        '../../../vendor/mujoco_models'
+        '/Users/navneetmadhukumar/Downloads/pytorch-maml-rl/maml_rl/envs/vendor/mujoco_models'
     )
 )
 
@@ -32,11 +32,13 @@ def q_mult(a, b): # multiply two quaternion
     k = a[0]*b[3] + a[1]*b[2] - a[2]*b[1] + a[3]*b[0]
     return [w, i, j, k]
 
+
 class MujocoEnv(gym.Env):
     # Super class for the new mujoco env
     FILE = None
 
-    def __init__(self, action_noise=0.0, file_path=None, template_args=None):
+    def __init__(self, action_noise=0.0,
+                 file_path=None, template_args=None, render_mode='human'):
         # compile template
         if file_path is None:
             if self.__class__.FILE is None:
@@ -66,6 +68,7 @@ class MujocoEnv(gym.Env):
         self.qpos_dim = self.init_qpos.size
         self.qvel_dim = self.init_qvel.size
         self.ctrl_dim = self.init_ctrl.size
+        self.render_mode = render_mode
         self.action_noise = action_noise
         if "frame_skip" in self.model.numeric_names:
             frame_skip_id = self.model.numeric_names.index("frame_skip")
@@ -85,7 +88,6 @@ class MujocoEnv(gym.Env):
         super(MujocoEnv, self).__init__()
 
     @property
-    @overrides
     def action_space(self):
         bounds = self.model.actuator_ctrlrange
         lb = bounds[:, 0]
@@ -93,7 +95,6 @@ class MujocoEnv(gym.Env):
         return spaces.Box(lb, ub)
 
     @property
-    @overrides
     def observation_space(self):
         shp = self.get_current_obs().shape
         ub = BIG * np.ones(shp)
@@ -120,7 +121,6 @@ class MujocoEnv(gym.Env):
                 setattr(self.model.data, datum_name, datum)
                 start += datum_dim
 
-    @overrides
     def reset(self, init_state=None, **kwargs):
         self.reset_mujoco(init_state)
         self.model.forward()
@@ -147,8 +147,6 @@ class MujocoEnv(gym.Env):
             data.cfrc_ext.flat,
             data.qfrc_constraint.flat,
             cdists,
-            # data.qfrc_bias.flat,
-            # data.qfrc_passive.flat,
             self.dcom.flat,
         ])
         return obs
@@ -194,7 +192,7 @@ class MujocoEnv(gym.Env):
             self.viewer.set_model(self.model)
         return self.viewer
 
-    def render(self):
+    def render(self, mode='human'):
         viewer = self.get_viewer()
         viewer.loop_once()
 
@@ -207,12 +205,6 @@ class MujocoEnv(gym.Env):
         if self.viewer:
             self.viewer.finish()
 
-    def release(self):
-        # temporarily alleviate the issue (but still some leak)
-        from rllab.mujoco_py.mjlib import mjlib
-        mjlib.mj_deleteModel(self.model._wrapped)
-        mjlib.mj_deleteData(self.data._wrapped)
-
     def get_body_xmat(self, body_name):
         idx = self.model.body_names.index(body_name)
         return self.model.data.xmat[idx].reshape((3, 3))
@@ -224,10 +216,3 @@ class MujocoEnv(gym.Env):
     def get_body_comvel(self, body_name):
         idx = self.model.body_names.index(body_name)
         return self.model.body_comvels[idx]
-
-    def print_stats(self):
-        super(MujocoEnv, self).print_stats()
-        print("qpos dim:\t%d" % len(self.model.data.qpos))
-
-    def action_from_key(self, key):
-        raise NotImplementedError

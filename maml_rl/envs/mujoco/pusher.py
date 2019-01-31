@@ -1,13 +1,10 @@
-from rllab.envs.base import Step
-from rllab.misc.overrides import overrides
 from .mujoco_env import MujocoEnv
 import numpy as np
-from rllab.core.serializable import Serializable
-from rllab.misc import logger
-from rllab.misc import autoargs
 import pickle
+from gym import utils
 
 #num_tasks = 20
+
 
 def save_goal_samples(num_tasks, filename):
     all_goals = []
@@ -36,26 +33,27 @@ def save_goal_samples(num_tasks, filename):
     pickle.dump(np.asarray(all_goals), open(filename, "wb"))
     return np.asarray(all_goals)
 
-#save_goal_samples(20, "pusher_trainSet_20Tasks.pkl")
 
-# all_goals = save_goal_samples(num_tasks)
-# import IPython
-# IPython.embed()
-class PusherEnv(MujocoEnv, Serializable):
+class PusherEnv(MujocoEnv, utils.EzPickle):
+    """
+    Pusher Environment adapted from the MAESN repository.
+    
+    """
 
     FILE = 'pusher_env.xml'
 
     def __init__(self, choice=None, sparse = False , train = True):
         self.choice = choice
-        if train :
-            assert sparse == False
-            self.all_goals =  pickle.load(open("/root/code/rllab/rllab/envs/goals/pusher_trainSet.pkl", "rb"))
+        if train:
+            assert sparse is False
+            self.all_goals = pickle.load(open("/Users/navneetmadhukumar/Downloads/pytorch-maml-rl/maml_rl/envs/goals/pusher_trainSet.pkl", "rb"))
         else:
-            assert sparse == True
-            self.all_goals = pickle.load(open('/root/code/rllab/rllab/envs/goals/pusher_valSet.pkl' , 'rb'))
+            assert sparse is True
+            self.all_goals = pickle.load(open('/Users/navneetmadhukumar/Downloads/pytorch-maml-rl/maml_rl/envs/goals/pusher_valSet.pkl', 'rb'))
         self.sparse = sparse
         #all_goals = pickle.load(open("/home/russellm/generativemodel_tasks/maml_rl_fullversion/rllab/envs/mujoco/pusher_trainSet_100Tasks.pkl", "rb"))
         super(PusherEnv, self).__init__()
+        utils.EzPickle.__init__(self)
 
     def sample_goals(self, num_goals):
         return np.array([np.random.randint(0, num_goals*5) for i in range(num_goals)])
@@ -120,7 +118,8 @@ class PusherEnv(MujocoEnv, Serializable):
         else:
             reward = -5*block_dist 
         done = False
-        return Step(next_obs, reward, done)
+        info = {'distance_to_block': dist_to_block}
+        return next_obs, reward, done, info
 
 
 # if __name__ == "__main__":
@@ -130,3 +129,10 @@ class PusherEnv(MujocoEnv, Serializable):
 #     env.render()
 #     import IPython
 #     IPython.embed()
+
+if __name__ == '__main__':
+    # Testing the new environment
+    env = PusherEnv()
+    env.reset()
+    next_obs, reward, done, info = env.step(np.zeros(3))
+    print('Observation', str(next_obs))
