@@ -4,6 +4,7 @@ from torch.distributions import Categorical, Normal
 def weighted_mean(tensor, dim=None, weights=None):
     if weights is None:
         out = torch.mean(tensor)
+        return out
     if dim is None:
         out = torch.sum(tensor * weights)
         out.div_(torch.sum(weights))

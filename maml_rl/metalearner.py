@@ -50,8 +50,7 @@ class MetaLearner(object):
         log_probs = pi.log_prob(episodes.actions)
         if log_probs.dim() > 2:
             log_probs = torch.sum(log_probs, dim=2)
-        loss = -weighted_mean(log_probs * advantages, dim=0,
-            weights=episodes.mask)
+        loss = -weighted_mean(log_probs * advantages, dim=0)
 
         return loss
 

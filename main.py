@@ -164,17 +164,17 @@ if __name__ == '__main__':
     # Task-specific
     parser.add_argument('--fast-batch-size', type=int, default=50,
         help='batch size for each individual task')
-    parser.add_argument('--fast-lr', type=float, default=0.1,
+    parser.add_argument('--fast-lr', type=float, default=1,
         help='learning rate for the 1-step gradient update of MAML')
     parser.add_argument('--max-path-length', type=int, default=100,
-                        help='Maximum lenght of a single rollout')
+                        help='Maximum length of a single rollout')
 
     # Optimization
     parser.add_argument('--num-batches', type=int, default=500,
         help='number of batches')
     parser.add_argument('--meta-batch-size', type=int, default=20,
         help='number of tasks per batch')
-    parser.add_argument('--max-kl', type=float, default=1e-2,
+    parser.add_argument('--max-kl', type=float, default=1e-1,
         help='maximum value for the KL constraint in TRPO')
     parser.add_argument('--cg-iters', type=int, default=10,
         help='number of iterations of conjugate gradient')
