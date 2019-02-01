@@ -6,6 +6,7 @@ from torch.distributions.kl import kl_divergence
 from maml_rl.utils.torch_utils import (weighted_mean, detach_distribution,
                                        weighted_normalize)
 from maml_rl.utils.optimization import conjugate_gradient
+from tqdm import tqdm
 
 
 class MetaLearner(object):
@@ -73,7 +74,7 @@ class MetaLearner(object):
         for all the tasks `tasks`.
         """
         episodes = []
-        for task in tasks:
+        for task in tqdm(tasks):
             self.sampler.reset_task(task)
             train_episodes = self.sampler.sample(self.policy,
                 gamma=self.gamma, device=self.device)
@@ -81,6 +82,7 @@ class MetaLearner(object):
             valid_episodes = self.sampler.sample(self.policy, params=params,
                 gamma=self.gamma, device=self.device)
             episodes.append((train_episodes, valid_episodes))
+
         return episodes
 
     def kl_divergence(self, episodes, old_pis=None):

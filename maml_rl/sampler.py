@@ -58,11 +58,13 @@ class BatchSampler(object):
             total_samples += observations.shape[0]
 
             if num_samples >= self.max_path_length:
+                # Reset the episode once you reach the maximum path length
                 observations, batch_ids = self.envs.reset()
                 num_samples = 0
 
-            if total_samples >= self.max_path_length*self.batch_size:
+            if total_samples >= self.batch_size*self.max_path_length:
                 break
+
 
         return episodes
 

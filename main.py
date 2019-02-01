@@ -165,7 +165,7 @@ if __name__ == '__main__':
         help='number of hidden layers')
 
     # Task-specific
-    parser.add_argument('--fast-batch-size', type=int, default=50,
+    parser.add_argument('--fast-batch-size', type=int, default=60,
         help='batch size for each individual task')
     parser.add_argument('--fast-lr', type=float, default=0.5,
         help='learning rate for the 1-step gradient update of MAML')
@@ -175,7 +175,7 @@ if __name__ == '__main__':
     # Optimization
     parser.add_argument('--num-batches', type=int, default=1000,
         help='number of batches')
-    parser.add_argument('--meta-batch-size', type=int, default=20,
+    parser.add_argument('--meta-batch-size', type=int, default=100,
         help='number of tasks per batch')
     parser.add_argument('--max-kl', type=float, default=1e-2,
         help='maximum value for the KL constraint in TRPO')
