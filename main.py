@@ -175,7 +175,7 @@ if __name__ == '__main__':
     # Optimization
     parser.add_argument('--num-batches', type=int, default=1000,
         help='number of batches')
-    parser.add_argument('--meta-batch-size', type=int, default=100,
+    parser.add_argument('--meta-batch-size', type=int, default=20,
         help='number of tasks per batch')
     parser.add_argument('--max-kl', type=float, default=1e-2,
         help='maximum value for the KL constraint in TRPO')
