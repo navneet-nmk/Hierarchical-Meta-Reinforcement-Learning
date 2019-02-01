@@ -33,7 +33,6 @@ class BatchEpisodes(object):
                 + observation_shape, dtype=np.float32)
             for i in range(self.batch_size):
                 length = len(self._observations_list[i])
-                print(length)
                 observations[:length, i] = np.stack(self._observations_list[i], axis=0)
             self._observations = torch.from_numpy(observations).to(self.device)
         return self._observations
