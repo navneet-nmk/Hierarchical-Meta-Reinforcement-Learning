@@ -130,7 +130,7 @@ def main(args):
         writer.add_scalar('total_rewards/after_update',
             total_rewards([ep.rewards for _, ep in episodes]), batch)
 
-        if args.save_every % (i+1) == 0:
+        if  (i+1)%args.save_every== 0:
             # Save policy network
             with open(os.path.join(save_folder,
                     'policy-{0}.pt'.format(batch)), 'wb') as f:
