@@ -122,13 +122,15 @@ def main(args):
         metalearner.step(episodes, max_kl=args.max_kl, cg_iters=args.cg_iters,
             cg_damping=args.cg_damping, ls_max_steps=args.ls_max_steps,
             ls_backtrack_ratio=args.ls_backtrack_ratio)
+
+        print('Total Rewards', str(total_rewards([ep.rewards for _, ep in episodes])))
         # Tensorboard
         writer.add_scalar('total_rewards/before_update',
             total_rewards([ep.rewards for ep, _ in episodes]), batch)
         writer.add_scalar('total_rewards/after_update',
             total_rewards([ep.rewards for _, ep in episodes]), batch)
 
-        if args.save_every % i == 0:
+        if args.save_every % (i+1) == 0:
             # Save policy network
             with open(os.path.join(save_folder,
                     'policy-{0}.pt'.format(batch)), 'wb') as f:
