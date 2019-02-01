@@ -165,9 +165,9 @@ if __name__ == '__main__':
         help='number of hidden layers')
 
     # Task-specific
-    parser.add_argument('--fast-batch-size', type=int, default=30,
+    parser.add_argument('--fast-batch-size', type=int, default=50,
         help='batch size for each individual task')
-    parser.add_argument('--fast-lr', type=float, default=0.1,
+    parser.add_argument('--fast-lr', type=float, default=0.5,
         help='learning rate for the 1-step gradient update of MAML')
     parser.add_argument('--max-path-length', type=int, default=100,
                         help='Maximum length of a single rollout')

@@ -54,7 +54,7 @@ class PusherEnv(MujocoEnv, Serializable):
         super(PusherEnv, self).__init__()
 
     def sample_tasks(self, num_goals):
-        return np.array([np.random.randint(0, num_goals) for i in range(num_goals)])
+        return np.array([np.random.randint(0, 5*num_goals) for i in range(num_goals)])
 
     def reset_task(self, task):
         self.choice = task
