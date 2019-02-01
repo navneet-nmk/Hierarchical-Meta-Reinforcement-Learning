@@ -24,7 +24,7 @@ class BatchSampler(object):
                  max_path_length=100,
                  num_workers=mp.cpu_count() - 1):
         self.env_name = env_name
-        self.batch_size = batch_size*max_path_length
+        self.batch_size = batch_size
         self.num_workers = num_workers
         self.max_path_length = max_path_length
         self.queue = mp.Queue()
@@ -44,20 +44,26 @@ class BatchSampler(object):
         observations, batch_ids = self.envs.reset()
         dones = [False]
         num_samples = 0
+        total_samples = 0
         while (not all(dones)) or (not self.queue.empty()):
             with torch.no_grad():
                 observations_tensor = torch.from_numpy(observations).to(device=device)
                 observations_tensor = observations_tensor.float()
                 actions_tensor = policy(observations_tensor, params=params).sample()
                 actions = actions_tensor.cpu().numpy()
-            #time.sleep(.002)
             new_observations, rewards, dones, new_batch_ids, _ = self.envs.step(actions)
             episodes.append(observations, actions, rewards, batch_ids)
             observations, batch_ids = new_observations, new_batch_ids
             num_samples += observations.shape[0]
+            total_samples += observations.shape[0]
 
-            if num_samples >= self.batch_size:
+            if num_samples >= self.max_path_length:
+                observations, batch_ids = self.envs.reset()
+                num_samples = 0
+
+            if total_samples >= self.max_path_length*self.batch_size:
                 break
+
         return episodes
 
     def reset_task(self, task):

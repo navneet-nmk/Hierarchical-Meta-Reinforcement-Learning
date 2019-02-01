@@ -21,6 +21,7 @@ class LinearFeatureBaseline(nn.Module):
         return 2 * self.input_size + 4
 
     def _feature(self, episodes):
+        print(episodes.mask)
         ones = episodes.mask.unsqueeze(2)
         observations = episodes.observations * ones
         cum_sum = torch.cumsum(ones, dim=0) * ones

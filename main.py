@@ -116,7 +116,7 @@ def main(args):
     metalearner = MetaLearner(sampler, policy, baseline, gamma=args.gamma,
         fast_lr=args.fast_lr, tau=args.tau, device=args.device)
 
-    for batch in range(args.num_batches):
+    for i, batch in enumerate(range(args.num_batches)):
         tasks = sampler.sample_tasks(num_tasks=args.meta_batch_size)
         episodes = metalearner.sample(tasks, first_order=args.first_order)
         metalearner.step(episodes, max_kl=args.max_kl, cg_iters=args.cg_iters,
@@ -128,10 +128,11 @@ def main(args):
         writer.add_scalar('total_rewards/after_update',
             total_rewards([ep.rewards for _, ep in episodes]), batch)
 
-        # Save policy network
-        with open(os.path.join(save_folder,
-                'policy-{0}.pt'.format(batch)), 'wb') as f:
-            torch.save(policy, f)
+        if args.save_every % i == 0:
+            # Save policy network
+            with open(os.path.join(save_folder,
+                    'policy-{0}.pt'.format(batch)), 'wb') as f:
+                torch.save(policy, f)
 
     with open(os.path.join(save_folder, 'baseline.pt'), 'wb') as f:
         torch.save(baseline, f)
@@ -162,19 +163,19 @@ if __name__ == '__main__':
         help='number of hidden layers')
 
     # Task-specific
-    parser.add_argument('--fast-batch-size', type=int, default=50,
+    parser.add_argument('--fast-batch-size', type=int, default=30,
         help='batch size for each individual task')
-    parser.add_argument('--fast-lr', type=float, default=1,
+    parser.add_argument('--fast-lr', type=float, default=0.1,
         help='learning rate for the 1-step gradient update of MAML')
     parser.add_argument('--max-path-length', type=int, default=100,
                         help='Maximum length of a single rollout')
 
     # Optimization
-    parser.add_argument('--num-batches', type=int, default=500,
+    parser.add_argument('--num-batches', type=int, default=1000,
         help='number of batches')
     parser.add_argument('--meta-batch-size', type=int, default=20,
         help='number of tasks per batch')
-    parser.add_argument('--max-kl', type=float, default=1e-1,
+    parser.add_argument('--max-kl', type=float, default=1e-2,
         help='maximum value for the KL constraint in TRPO')
     parser.add_argument('--cg-iters', type=int, default=10,
         help='number of iterations of conjugate gradient')
@@ -192,6 +193,8 @@ if __name__ == '__main__':
         help='number of workers for trajectories sampling')
     parser.add_argument('--device', type=str, default='cpu',
         help='set the device (cpu or cuda)')
+    parser.add_argument('--save-every', type=int, default=50,
+                        help='save the policy every n epochs')
 
     args = parser.parse_args()
     print("Using ", str(mp.cpu_count()-1), " number of workers")
