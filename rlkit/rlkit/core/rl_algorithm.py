@@ -18,6 +18,7 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
             self,
             env,
             exploration_policy: ExplorationPolicy,
+            higher_level_policy = None,
             training_env=None,
             num_epochs=100,
             num_steps_per_epoch=10000,
@@ -75,6 +76,7 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
 
         self.training_env = training_env or pickle.loads(pickle.dumps(env))
         self.exploration_policy = exploration_policy
+        self.higher_level_policy = higher_level_policy
         self.num_epochs = num_epochs
         self.num_env_steps_per_epoch = num_steps_per_epoch
         self.num_steps_per_eval = num_steps_per_eval

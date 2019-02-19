@@ -24,6 +24,7 @@ class EmpowermentSkills(TorchRLAlgorithm):
 
     def __init__(self,
                  env,
+                 higher_policy,
                  policy,
                  discriminator,
                  q_value_function_1,
@@ -99,6 +100,7 @@ class EmpowermentSkills(TorchRLAlgorithm):
         )
 
         self.env = env
+        self.h_policy = higher_policy
         self.policy = policy
         self.discriminator = discriminator
         self.qvf = q_value_function_1
@@ -181,9 +183,9 @@ class EmpowermentSkills(TorchRLAlgorithm):
         self.action_dim = self.env.action_space.flat_dim
         self.obs_dim = self.env.observation_space.flat_dim
 
-    def sample_empowerment_latents(self):
+    def sample_empowerment_latents(self, observation):
         """Samples z from p(z), using probabilities in self.p_z."""
-        return np.random.choice(self.num_skills, p=self.p_z)
+        return self.h_policy(observation).sample()
 
     def split_obs(self, obs):
         obs, z_one_hot = obs[:self.obs_dim], obs[self.obs_dim:]
@@ -429,7 +431,7 @@ class EmpowermentSkills(TorchRLAlgorithm):
         obs = batch['observations']
         actions = batch['actions']
         next_obs = batch['next_observations']
-        p_z = self.sample_empowerment_latents()
+        p_z = self.sample_empowerment_latents(obs)
 
         """
         
