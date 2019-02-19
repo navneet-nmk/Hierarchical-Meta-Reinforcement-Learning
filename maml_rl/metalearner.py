@@ -29,14 +29,13 @@ class HierarchicalMetaLearner(object):
 
     """
 
-    def __init__(self, sampler, lower_level_policy,
+    def __init__(self, sampler,
                  higher_level_policy, baseline,
                  gamma=0.95,
                  fast_lr=0.5, tau=1.0, device='cpu'
                  ):
 
         self.sampler = sampler
-        self.l_policy = lower_level_policy
         self.l_policy.trainable = False
         self.h_policy = higher_level_policy
         self.baseline = baseline
@@ -56,7 +55,6 @@ class HierarchicalMetaLearner(object):
 
         # First we calculate the latent space actions from the higher level policy (stored in episodes).
         # Then we calculate the lower level actions using the higher level actions
-        pi = self.l_policy(episodes.observations, episodes.higher_level_actions,  params=l_params)
         pi_higher = self.h_policy(episodes.observations, params=h_params)
         # Calculate the log probability
         log_probs = pi_higher.log_prob(episodes.higher_level_actions)
@@ -83,17 +81,17 @@ class HierarchicalMetaLearner(object):
 
         return params
 
-    def sample(self, tasks, first_order=False):
+    def sample(self, tasks, l_policy, first_order=False):
         """Sample trajectories (before and after the update of the parameters)
         for all the tasks `tasks`.
         """
         episodes = []
         for task in tqdm(tasks):
             self.sampler.reset_task(task)
-            train_episodes = self.sampler.sample_hierarchical(self.l_policy, self.h_policy,
+            train_episodes = self.sampler.sample_hierarchical(l_policy, self.h_policy,
                 gamma=self.gamma, device=self.device)
             params = self.adapt(train_episodes, first_order=first_order)
-            valid_episodes = self.sampler.sample_hierarchical(self.l_policy, self.h_policy, params=params,
+            valid_episodes = self.sampler.sample_hierarchical(l_policy, self.h_policy, params=params,
                 gamma=self.gamma, device=self.device)
             episodes.append((train_episodes, valid_episodes))
 
@@ -211,7 +209,6 @@ class HierarchicalMetaLearner(object):
             vector_to_parameters(old_params, self.h_policy.parameters())
 
     def to(self, device, **kwargs):
-        self.l_policy.to(device, **kwargs)
         self.h_policy.to(device, **kwargs)
         self.baseline.to(device, **kwargs)
         self.device = device

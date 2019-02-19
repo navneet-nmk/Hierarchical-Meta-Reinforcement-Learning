@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import json
 
-from maml_rl.metalearner import MetaLearner
+from maml_rl.metalearner import MetaLearner, HierarchicalMetaLearner
 from maml_rl.policies import CategoricalMLPPolicy, NormalMLPPolicy
 from maml_rl.baseline import LinearFeatureBaseline
 from maml_rl.sampler import BatchSampler
@@ -144,15 +144,57 @@ def main(args):
                                num_workers=args.num_workers)
 
         # Get the policies
-        higher_policy, lower_policy, baseline = hierarchical_meta_policy(args.env_name,
+        higher_policy, lower_trainer, baseline = hierarchical_meta_policy(args.env_name,
                                                                          args.skills_dim,
                                                                          sampler=sampler,
                                                                          net_size=args.hidden_size,
                                                                          output_size=1)
 
         # Define the hierarchical meta learner
-        
+        hr_meta_learner = HierarchicalMetaLearner(sampler, higher_policy,
+                                                  baseline, gamma=args.gamma,
+            fast_lr=args.fast_lr, tau=args.tau, device=args.device)
 
+        # Training procedure
+        for i, batch in enumerate(range(args.num_batches)):
+
+            # Train the lower level policy
+            lower_trainer.train()
+
+            # Now freeze the lower level policy
+            lower_networks = lower_trainer.networks
+            lower_policy = lower_networks[0]
+            lower_policy.trainable = False
+
+            # Sample the different tasks
+            tasks = sampler.sample_tasks(num_tasks=args.meta_batch_size)
+
+            # Sample the different episodes for the different tasks
+            episodes = hr_meta_learner.sample(tasks, lower_policy, first_order=args.first_order)
+
+            hr_meta_learner.step(episodes, max_kl=args.max_kl, cg_iters=args.cg_iters,
+                cg_damping=args.cg_damping, ls_max_steps=args.ls_max_steps,
+                ls_backtrack_ratio=args.ls_backtrack_ratio)
+
+            print('Total Rewards', str(total_rewards([ep.rewards for _, ep in episodes])))
+
+            lower_policy.trainable = True
+
+            # Tensorboard
+            writer.add_scalar('total_rewards/before_update',
+                total_rewards([ep.rewards for ep, _ in episodes]), batch)
+            writer.add_scalar('total_rewards/after_update',
+                total_rewards([ep.rewards for _, ep in episodes]), batch)
+
+            if (i+1) % args.save_every == 0:
+                # Save the policy networks
+                with open(os.path.join(save_folder,
+                        'h_policy-{0}.pt'.format(batch)), 'wb') as f:
+                    torch.save(higher_policy, f)
+
+                with open(os.path.join(save_folder,
+                                       'l_policy-{0}.pt'.format(batch)), 'wb') as f:
+                    torch.save(lower_policy, f)
 
     with open(os.path.join(save_folder, 'baseline.pt'), 'wb') as f:
         torch.save(baseline, f)
