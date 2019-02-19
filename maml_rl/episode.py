@@ -7,17 +7,21 @@ class BatchEpisodes(object):
     def __init__(self, batch_size,
                  num_workers=3,
                  max_path_length=100,
-                 gamma=0.95, device='cpu'):
+                 gamma=0.95, device='cpu', hierarchical=False):
         self.batch_size = batch_size
         self.gamma = gamma
         self.device = device
         self.num_workers = num_workers
         self.max_path_length = max_path_length
+        self.hr = hierarchical
 
         self._observations_list = [[] for _ in range(batch_size)]
         self._actions_list = [[] for _ in range(batch_size)]
         self._rewards_list = [[] for _ in range(batch_size)]
         self._mask_list = []
+        if hierarchical:
+            self._h_actions_list = [[] for _ in range(batch_size)]
+            self._h_actions = None
 
         self._observations = None
         self._actions = None
@@ -48,6 +52,21 @@ class BatchEpisodes(object):
                 actions[:length, i] = np.stack(self._actions_list[i], axis=0)
             self._actions = torch.from_numpy(actions).to(self.device)
         return self._actions
+
+    @property
+    def h_actions(self):
+        if self.hr:
+            if self._h_actions is None:
+                action_shape = self._h_actions_list[0][0].shape
+                actions = np.zeros((len(self), self.batch_size)
+                                   + action_shape, dtype=np.float32)
+                for i in range(self.batch_size):
+                    length = len(self._h_actions_list[i])
+                    actions[:length, i] = np.stack(self._h_actions_list[i], axis=0)
+                self._h_actions = torch.from_numpy(actions).to(self.device)
+            return self.h_actions
+        else:
+            return None
 
     @property
     def rewards(self):
@@ -104,6 +123,16 @@ class BatchEpisodes(object):
                 continue
             self._observations_list[batch_id].append(observation.astype(np.float32))
             self._actions_list[batch_id].append(action.astype(np.float32))
+            self._rewards_list[batch_id].append(reward.astype(np.float32))
+
+    def h_append(self, observations, actions, h_actions,  rewards, batch_ids):
+        for observation, action, h_action,reward, batch_id in zip(
+                observations, actions, h_actions, rewards, batch_ids):
+            if batch_id is None:
+                continue
+            self._observations_list[batch_id].append(observation.astype(np.float32))
+            self._actions_list[batch_id].append(action.astype(np.float32))
+            self._h_actions_list[batch_id].append(h_action.astype(np.float32))
             self._rewards_list[batch_id].append(reward.astype(np.float32))
 
     def __len__(self):

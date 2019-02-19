@@ -9,6 +9,106 @@ from maml_rl.utils.optimization import conjugate_gradient
 from tqdm import tqdm
 
 
+class HierarchicalMetaLearner(object):
+    """
+
+    The hierarchical meta learner consists of 2 policies.
+    The lower level policy is responsible for training on the individual tasks
+    in a task agnostic manner and the higher level policy is meta trained to
+    control the lower level policy.
+
+    The meta-learner is responsible for sampling the trajectories/episodes
+    (before and after the one-step adaptation), compute the inner loss, compute
+    the updated parameters based on the inner-loss, and perform the meta-update.
+
+    The only difference being that the sampler makes use of the lower level policy and
+    the meta trained policy is the higher level policy.
+
+    The lower level policy is only used to calculate the rewards and make changes to the state
+    of the environment.
+
+    """
+
+    def __init__(self, sampler, lower_level_policy,
+                 higher_level_policy, baseline,
+                 gamma=0.95,
+                 fast_lr=0.5, tau=1.0, device='cpu'
+                 ):
+
+        self.sampler = sampler
+        self.l_policy = lower_level_policy
+        self.l_policy.trainable = False
+        self.h_policy = higher_level_policy
+        self.baseline = baseline
+        self.gamma = gamma
+        self.fast_lr = fast_lr
+        self.tau = tau
+        self.to(device)
+
+    def inner_loss(self, episodes, l_params=None, h_params=None):
+        """Compute the inner loss for the one-step gradient update. The inner
+        loss is REINFORCE with baseline [2], computed on advantages estimated
+        with Generalized Advantage Estimation (GAE, [3]).
+        """
+        values = self.baseline(episodes)
+        advantages = episodes.gae(values, tau=self.tau)
+        advantages = weighted_normalize(advantages, weights=episodes.mask)
+
+        # First we calculate the latent space actions from the higher level policy (stored in episodes).
+        # Then we calculate the lower level actions using the higher level actions
+        pi = self.l_policy(episodes.observations, episodes.higher_level_actions,  params=l_params)
+        pi_higher = self.h_policy(episodes.observations, params=h_params)
+        # Calculate the log probability
+        log_probs = pi_higher.log_prob(episodes.higher_level_actions)
+        if log_probs.dim() > 2:
+            log_probs = torch.sum(log_probs, dim=2)
+        loss = -weighted_mean(log_probs * advantages, dim=0)
+
+        return loss
+
+    def adapt(self, episodes, first_order=False):
+        """Adapt the parameters of the higher policy network to a new task, from
+        sampled trajectories `episodes`, with a one-step gradient update [1].
+
+        The lower policy remains fixed.
+
+        """
+        # Fit the baseline to the training episodes
+        self.baseline.fit(episodes)
+        # Get the loss on the training episodes
+        loss = self.inner_loss(episodes)
+        # Get the new parameters after a one-step gradient update
+        params = self.h_policy.update_params(loss, step_size=self.fast_lr,
+            first_order=first_order)
+
+        return params
+
+    def sample(self, tasks, first_order=False):
+        """Sample trajectories (before and after the update of the parameters)
+        for all the tasks `tasks`.
+        """
+        episodes = []
+        for task in tqdm(tasks):
+            self.sampler.reset_task(task)
+            train_episodes = self.sampler.sample(self.policy,
+                gamma=self.gamma, device=self.device)
+            params = self.adapt(train_episodes, first_order=first_order)
+            valid_episodes = self.sampler.sample(self.policy, params=params,
+                gamma=self.gamma, device=self.device)
+            episodes.append((train_episodes, valid_episodes))
+
+        return episodes
+
+    def to(self, device, **kwargs):
+        self.l_policy.to(device, **kwargs)
+        self.h_policy.to(device, **kwargs)
+        self.baseline.to(device, **kwargs)
+        self.device = device
+
+
+
+
+
 class MetaLearner(object):
     """Meta-learner
 
