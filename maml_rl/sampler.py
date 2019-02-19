@@ -35,7 +35,7 @@ class BatchSampler(object):
         else:
             self._env = gym.make(env_name)
 
-    def sample_hierarchical(self, l_policy, h_policy, l_params=None, h_params=None,
+    def sample_hierarchical(self, l_policy, h_policy, h_params=None,
                             gamma=0.95, device='cpu'):
 
         episodes = BatchEpisodes(batch_size=self.batch_size, gamma=gamma, device=device, hierarchical=True)
@@ -54,8 +54,10 @@ class BatchSampler(object):
                 # We first calculate the latent space actions using the higher level policy
                 h_actions_tensor = h_policy(observations_tensor, params=h_params).sample()
                 # Now we calculate the lower level actions using the lower level policy
-                l_actions_tensor = l_policy(observations_tensor, h_actions_tensor, params=l_params).sample()
-                actions = l_actions_tensor.cpu().numpy()
+                # Combine the observations
+                obs_combined = torch.cat([observations_tensor, h_actions_tensor])
+                l_actions_tensor = l_policy(obs_combined)
+                actions = l_actions_tensor[0].cpu().numpy()
                 h_actions = h_actions_tensor.cpu().numpy()
             new_observations, rewards, dones, new_batch_ids, _ = self.envs.step(actions)
             episodes.h_append(observations, actions, h_actions, rewards, batch_ids)

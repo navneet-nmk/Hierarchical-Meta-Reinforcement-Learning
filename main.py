@@ -71,6 +71,7 @@ def hierarchical_meta_policy(env, skills_dim, sampler, output_size, net_size):
     # Define the empowerment skills algorithm
     algorithm = EmpowermentSkills(env=env,
                                   policy=policy,
+                                  higher_policy=higher_policy,
                                   discriminator=discriminator_function,
                                   q_value_function_1=q_value_function_1,
                                   q_value_function_2=q_value_function_2,
@@ -132,7 +133,7 @@ def main(args):
             writer.add_scalar('total_rewards/after_update',
                 total_rewards([ep.rewards for _, ep in episodes]), batch)
 
-            if  (i+1)%args.save_every== 0:
+            if (i+1) % args.save_every== 0:
                 # Save policy network
                 with open(os.path.join(save_folder,
                         'policy-{0}.pt'.format(batch)), 'wb') as f:
@@ -159,7 +160,7 @@ def main(args):
         for i, batch in enumerate(range(args.num_batches)):
 
             # Train the lower level policy
-            lower_trainer.train()
+            lower_trainer.train(higher_policy)
 
             # Now freeze the lower level policy
             lower_networks = lower_trainer.networks

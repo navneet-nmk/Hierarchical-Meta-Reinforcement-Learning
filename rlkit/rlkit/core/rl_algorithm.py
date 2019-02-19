@@ -1,5 +1,6 @@
 import abc
 import pickle
+import torch
 import time
 from collections import OrderedDict
 
@@ -100,6 +101,7 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
         if eval_sampler is None:
             if eval_policy is None:
                 eval_policy = exploration_policy
+                eval_hr_policy = higher_level_policy
             eval_sampler = InPlacePathSampler(
                 env=env,
                 policy=eval_policy,
@@ -132,7 +134,7 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
         self._exploration_paths = []
         self.post_epoch_funcs = []
 
-    def train(self, start_epoch=0):
+    def train(self, start_epoch=0, higher_level_policy=None):
         self.pretrain()
         if start_epoch == 0:
             params = self.get_epoch_snapshot(-1)
@@ -142,9 +144,9 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
         gt.reset()
         gt.set_def_unique(False)
         if self.collection_mode == 'online':
-            self.train_online(start_epoch=start_epoch)
+            self.train_online(higher_level_policy, start_epoch=start_epoch)
         elif self.collection_mode == 'batch':
-            self.train_batch(start_epoch=start_epoch)
+            self.train_batch(higher_level_policy, start_epoch=start_epoch)
         else:
             raise TypeError("Invalid collection_mode: {}".format(
                 self.collection_mode
@@ -153,7 +155,7 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
     def pretrain(self):
         pass
 
-    def train_online(self, start_epoch=0):
+    def train_online(self, higher_level_policy, start_epoch=0):
         self._current_path_builder = PathBuilder()
         for epoch in gt.timed_for(
                 range(start_epoch, self.num_epochs),
@@ -163,7 +165,7 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
             set_to_train_mode(self.training_env)
             observation = self._start_new_rollout()
             for _ in range(self.num_env_steps_per_epoch):
-                observation = self._take_step_in_env(observation)
+                observation = self._take_step_in_env(observation, higher_level_policy)
                 gt.stamp('sample')
 
                 self._try_to_train()
@@ -174,7 +176,7 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
             gt.stamp('eval')
             self._end_epoch(epoch)
 
-    def train_batch(self, start_epoch):
+    def train_batch(self, higher_level_policy, start_epoch):
         self._current_path_builder = PathBuilder()
         for epoch in gt.timed_for(
                 range(start_epoch, self.num_epochs),
@@ -186,7 +188,7 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
             # This implementation is rather naive. If you want to (e.g.)
             # parallelize data collection, this would be the place to do it.
             for _ in range(self.num_env_steps_per_epoch):
-                observation = self._take_step_in_env(observation)
+                observation = self._take_step_in_env(observation, higher_level_policy)
             gt.stamp('sample')
 
             self._try_to_train()
@@ -197,9 +199,9 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
             gt.stamp('eval')
             self._end_epoch(epoch)
 
-    def _take_step_in_env(self, observation):
+    def _take_step_in_env(self, observation, higher_level_policy):
         action, agent_info = self._get_action_and_info(
-            observation,
+            observation, higher_level_policy
         )
         if self.render:
             self.training_env.render()
@@ -299,15 +301,17 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
             self.min_num_steps_before_training
         )
 
-    def _get_action_and_info(self, observation):
+    def _get_action_and_info(self, observation, higher_level_policy):
         """
         Get an action to take in the environment.
         :param observation:
         :return:
         """
         self.exploration_policy.set_num_steps_total(self._n_env_steps_total)
+        with torch.no_grad():
+            latent_skills = higher_level_policy(observation)
         return self.exploration_policy.get_action(
-            observation,
+            torch.cat([observation, latent_skills])
         )
 
     def _start_epoch(self, epoch):
