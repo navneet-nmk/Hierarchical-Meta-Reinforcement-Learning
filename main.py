@@ -98,43 +98,61 @@ def main(args):
         config.update(device=args.device.type)
         json.dump(config, f, indent=2)
 
-    sampler = BatchSampler(args.env_name, batch_size=args.fast_batch_size,
-        num_workers=args.num_workers)
-    if continuous_actions:
-        policy = NormalMLPPolicy(
-            int(np.prod(sampler.envs.observation_space.shape)),
-            int(np.prod(sampler.envs.action_space.shape)),
-            hidden_sizes=(args.hidden_size,) * args.num_layers)
+    if not args.hierarchical:
+
+        sampler = BatchSampler(args.env_name, batch_size=args.fast_batch_size,
+            num_workers=args.num_workers)
+        if continuous_actions:
+            policy = NormalMLPPolicy(
+                int(np.prod(sampler.envs.observation_space.shape)),
+                int(np.prod(sampler.envs.action_space.shape)),
+                hidden_sizes=(args.hidden_size,) * args.num_layers)
+        else:
+            policy = CategoricalMLPPolicy(
+                int(np.prod(sampler.envs.observation_space.shape)),
+                sampler.envs.action_space.n,
+                hidden_sizes=(args.hidden_size,) * args.num_layers)
+        baseline = LinearFeatureBaseline(
+            int(np.prod(sampler.envs.observation_space.shape)))
+
+        metalearner = MetaLearner(sampler, policy, baseline, gamma=args.gamma,
+            fast_lr=args.fast_lr, tau=args.tau, device=args.device)
+
+        for i, batch in enumerate(range(args.num_batches)):
+            tasks = sampler.sample_tasks(num_tasks=args.meta_batch_size)
+            episodes = metalearner.sample(tasks, first_order=args.first_order)
+            metalearner.step(episodes, max_kl=args.max_kl, cg_iters=args.cg_iters,
+                cg_damping=args.cg_damping, ls_max_steps=args.ls_max_steps,
+                ls_backtrack_ratio=args.ls_backtrack_ratio)
+
+            print('Total Rewards', str(total_rewards([ep.rewards for _, ep in episodes])))
+            # Tensorboard
+            writer.add_scalar('total_rewards/before_update',
+                total_rewards([ep.rewards for ep, _ in episodes]), batch)
+            writer.add_scalar('total_rewards/after_update',
+                total_rewards([ep.rewards for _, ep in episodes]), batch)
+
+            if  (i+1)%args.save_every== 0:
+                # Save policy network
+                with open(os.path.join(save_folder,
+                        'policy-{0}.pt'.format(batch)), 'wb') as f:
+                    torch.save(policy, f)
+
     else:
-        policy = CategoricalMLPPolicy(
-            int(np.prod(sampler.envs.observation_space.shape)),
-            sampler.envs.action_space.n,
-            hidden_sizes=(args.hidden_size,) * args.num_layers)
-    baseline = LinearFeatureBaseline(
-        int(np.prod(sampler.envs.observation_space.shape)))
 
-    metalearner = MetaLearner(sampler, policy, baseline, gamma=args.gamma,
-        fast_lr=args.fast_lr, tau=args.tau, device=args.device)
+        sampler = BatchSampler(args.env_name, batch_size=args.fast_batch_size,
+                               num_workers=args.num_workers)
 
-    for i, batch in enumerate(range(args.num_batches)):
-        tasks = sampler.sample_tasks(num_tasks=args.meta_batch_size)
-        episodes = metalearner.sample(tasks, first_order=args.first_order)
-        metalearner.step(episodes, max_kl=args.max_kl, cg_iters=args.cg_iters,
-            cg_damping=args.cg_damping, ls_max_steps=args.ls_max_steps,
-            ls_backtrack_ratio=args.ls_backtrack_ratio)
+        # Get the policies
+        higher_policy, lower_policy, baseline = hierarchical_meta_policy(args.env_name,
+                                                                         args.skills_dim,
+                                                                         sampler=sampler,
+                                                                         net_size=args.hidden_size,
+                                                                         output_size=1)
 
-        print('Total Rewards', str(total_rewards([ep.rewards for _, ep in episodes])))
-        # Tensorboard
-        writer.add_scalar('total_rewards/before_update',
-            total_rewards([ep.rewards for ep, _ in episodes]), batch)
-        writer.add_scalar('total_rewards/after_update',
-            total_rewards([ep.rewards for _, ep in episodes]), batch)
+        # Define the hierarchical meta learner
+        
 
-        if  (i+1)%args.save_every== 0:
-            # Save policy network
-            with open(os.path.join(save_folder,
-                    'policy-{0}.pt'.format(batch)), 'wb') as f:
-                torch.save(policy, f)
 
     with open(os.path.join(save_folder, 'baseline.pt'), 'wb') as f:
         torch.save(baseline, f)
@@ -157,6 +175,10 @@ if __name__ == '__main__':
         help='value of the discount factor for GAE')
     parser.add_argument('--first-order', action='store_true',
         help='use the first-order approximation of MAML')
+    parser.add_argument('--hierarchical', type=bool, default=True,
+                        help='whether to use a hierarchical policy or not')
+    parser.add_argument('--skills-dim', type=int, default=50,
+                        help='The dimension of skills to be learned by the empowerment model')
 
     # Policy network (relu activation function)
     parser.add_argument('--hidden-size', type=int, default=100,

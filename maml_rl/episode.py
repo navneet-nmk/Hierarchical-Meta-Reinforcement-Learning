@@ -92,6 +92,16 @@ class BatchEpisodes(object):
         return self._returns
 
     @property
+    def h_mask(self):
+        if self._mask is None:
+            mask = np.zeros((len(self), self.batch_size), dtype=np.float32)
+            for i in range(self.batch_size):
+                length = len(self._h_actions_list[i])
+                mask[:length, i] = 1.0
+            self._mask = torch.from_numpy(mask).to(self.device)
+        return self._mask
+
+    @property
     def mask(self):
         if self._mask is None:
             mask = np.zeros((len(self), self.batch_size), dtype=np.float32)

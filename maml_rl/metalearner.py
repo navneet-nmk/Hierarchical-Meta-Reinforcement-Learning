@@ -90,23 +90,131 @@ class HierarchicalMetaLearner(object):
         episodes = []
         for task in tqdm(tasks):
             self.sampler.reset_task(task)
-            train_episodes = self.sampler.sample(self.policy,
+            train_episodes = self.sampler.sample_hierarchical(self.l_policy, self.h_policy,
                 gamma=self.gamma, device=self.device)
             params = self.adapt(train_episodes, first_order=first_order)
-            valid_episodes = self.sampler.sample(self.policy, params=params,
+            valid_episodes = self.sampler.sample_hierarchical(self.l_policy, self.h_policy, params=params,
                 gamma=self.gamma, device=self.device)
             episodes.append((train_episodes, valid_episodes))
 
         return episodes
+
+    def kl_divergence(self, episodes, old_pis=None):
+        kls = []
+        if old_pis is None:
+            old_pis = [None] * len(episodes)
+
+        for (train_episodes, valid_episodes), old_pi in zip(episodes, old_pis):
+            params = self.adapt(train_episodes)
+            pi = self.h_policy(valid_episodes.observations, params=params)
+
+            if old_pi is None:
+                old_pi = detach_distribution(pi)
+
+            mask = valid_episodes.mask
+            if valid_episodes.actions.dim() > 2:
+                mask = mask.unsqueeze(2)
+            kl = weighted_mean(kl_divergence(pi, old_pi), dim=0, weights=mask)
+            kls.append(kl)
+
+        return torch.mean(torch.stack(kls, dim=0))
+
+    def hessian_vector_product(self, episodes, damping=1e-2):
+        """Hessian-vector product, based on the Perlmutter method."""
+        def _product(vector):
+            kl = self.kl_divergence(episodes)
+            grads = torch.autograd.grad(kl, self.h_policy.parameters(),
+                create_graph=True)
+            flat_grad_kl = parameters_to_vector(grads)
+
+            grad_kl_v = torch.dot(flat_grad_kl, vector)
+            grad2s = torch.autograd.grad(grad_kl_v, self.h_policy.parameters())
+            flat_grad2_kl = parameters_to_vector(grad2s)
+
+            return flat_grad2_kl + damping * vector
+        return _product
+
+    def surrogate_loss(self, episodes, old_pis=None):
+        losses, kls, pis = [], [], []
+        if old_pis is None:
+            old_pis = [None] * len(episodes)
+
+        for (train_episodes, valid_episodes), old_pi in zip(episodes, old_pis):
+            params = self.adapt(train_episodes)
+            with torch.set_grad_enabled(old_pi is None):
+                pi = self.h_policy(valid_episodes.observations, params=params)
+                pis.append(detach_distribution(pi))
+
+                if old_pi is None:
+                    old_pi = detach_distribution(pi)
+
+                values = self.baseline(valid_episodes)
+                advantages = valid_episodes.gae(values, tau=self.tau)
+                advantages = weighted_normalize(advantages,
+                    weights=valid_episodes.mask)
+
+                log_ratio = (pi.log_prob(valid_episodes.h_actions)
+                    - old_pi.log_prob(valid_episodes.h_actions))
+                if log_ratio.dim() > 2:
+                    log_ratio = torch.sum(log_ratio, dim=2)
+                ratio = torch.exp(log_ratio)
+
+                loss = -weighted_mean(ratio * advantages, dim=0,
+                    weights=valid_episodes.mask)
+                losses.append(loss)
+
+                mask = valid_episodes.h_mask
+                if valid_episodes.h_actions.dim() > 2:
+                    mask = mask.unsqueeze(2)
+                kl = weighted_mean(kl_divergence(pi, old_pi), dim=0,
+                    weights=mask)
+                kls.append(kl)
+
+        return (torch.mean(torch.stack(losses, dim=0)),
+                torch.mean(torch.stack(kls, dim=0)), pis)
+
+    def step(self, episodes, max_kl=1e-3, cg_iters=10, cg_damping=1e-2,
+             ls_max_steps=10, ls_backtrack_ratio=0.5):
+        """Meta-optimization step (ie. update of the initial parameters), based
+        on Trust Region Policy Optimization (TRPO, [4]).
+        """
+        old_loss, _, old_pis = self.surrogate_loss(episodes)
+        grads = torch.autograd.grad(old_loss, self.h_policy.parameters())
+        grads = parameters_to_vector(grads)
+
+        # Compute the step direction with Conjugate Gradient
+        hessian_vector_product = self.hessian_vector_product(episodes,
+            damping=cg_damping)
+        stepdir = conjugate_gradient(hessian_vector_product, grads,
+            cg_iters=cg_iters)
+
+        # Compute the Lagrange multiplier
+        shs = 0.5 * torch.dot(stepdir, hessian_vector_product(stepdir))
+        lagrange_multiplier = torch.sqrt(shs / max_kl)
+
+        step = stepdir / lagrange_multiplier
+
+        # Save the old parameters
+        old_params = parameters_to_vector(self.h_policy.parameters())
+
+        # Line search
+        step_size = 1.0
+        for _ in range(ls_max_steps):
+            vector_to_parameters(old_params - step_size * step,
+                                 self.h_policy.parameters())
+            loss, kl, _ = self.surrogate_loss(episodes, old_pis=old_pis)
+            improve = loss - old_loss
+            if (improve.item() < 0.0) and (kl.item() < max_kl):
+                break
+            step_size *= ls_backtrack_ratio
+        else:
+            vector_to_parameters(old_params, self.h_policy.parameters())
 
     def to(self, device, **kwargs):
         self.l_policy.to(device, **kwargs)
         self.h_policy.to(device, **kwargs)
         self.baseline.to(device, **kwargs)
         self.device = device
-
-
-
 
 
 class MetaLearner(object):

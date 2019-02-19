@@ -38,7 +38,7 @@ class BatchSampler(object):
     def sample_hierarchical(self, l_policy, h_policy, l_params=None, h_params=None,
                             gamma=0.95, device='cpu'):
 
-        episodes = BatchEpisodes(batch_size=self.batch_size, gamma=gamma, device=device)
+        episodes = BatchEpisodes(batch_size=self.batch_size, gamma=gamma, device=device, hierarchical=True)
         for i in range(self.batch_size):
             self.queue.put(i)
         for _ in range(self.num_workers):
@@ -56,8 +56,9 @@ class BatchSampler(object):
                 # Now we calculate the lower level actions using the lower level policy
                 l_actions_tensor = l_policy(observations_tensor, h_actions_tensor, params=l_params).sample()
                 actions = l_actions_tensor.cpu().numpy()
+                h_actions = h_actions_tensor.cpu().numpy()
             new_observations, rewards, dones, new_batch_ids, _ = self.envs.step(actions)
-            episodes.append(observations, actions, rewards, batch_ids)
+            episodes.h_append(observations, actions, h_actions, rewards, batch_ids)
             observations, batch_ids = new_observations, new_batch_ids
             num_samples += observations.shape[0]
             total_samples += observations.shape[0]
@@ -101,7 +102,6 @@ class BatchSampler(object):
 
             if total_samples >= self.batch_size*self.max_path_length:
                 break
-
 
         return episodes
 
