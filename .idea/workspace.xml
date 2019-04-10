@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e53e11ec-f3cd-4a7b-b9d2-2f28e76e339a" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-      <change beforePath="$PROJECT_DIR$/maml_rl/metalearner.py" afterPath="$PROJECT_DIR$/maml_rl/metalearner.py" />
       <change beforePath="$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py" afterPath="$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py" />
+      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/core/rl_algorithm.py" afterPath="$PROJECT_DIR$/rlkit/rlkit/core/rl_algorithm.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="165" column="52" lean-forward="false" selection-start-line="165" selection-start-column="52" selection-end-line="165" selection-end-column="52" />
+            <state relative-caret-position="1702">
+              <caret line="173" column="45" lean-forward="false" selection-start-line="173" selection-start-column="45" selection-end-line="173" selection-end-column="45" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -38,11 +37,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="empowerment_skills.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="empowerment_skills.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="183" column="49" lean-forward="false" selection-start-line="183" selection-start-column="49" selection-end-line="183" selection-end-column="49" />
+            <state relative-caret-position="131">
+              <caret line="551" column="25" lean-forward="false" selection-start-line="551" selection-start-column="25" selection-end-line="551" selection-end-column="25" />
               <folding>
                 <element signature="e#62#80#0" expanded="true" />
               </folding>
@@ -53,8 +52,8 @@
       <file leaf-file-name="rl_algorithm.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rlkit/rlkit/core/rl_algorithm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="121">
-              <caret line="136" column="8" lean-forward="false" selection-start-line="136" selection-start-column="8" selection-end-line="136" selection-end-column="8" />
+            <state relative-caret-position="240">
+              <caret line="310" column="29" lean-forward="false" selection-start-line="310" selection-start-column="29" selection-end-line="310" selection-end-column="29" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -171,12 +170,12 @@
         <option value="$PROJECT_DIR$/maml_rl/envs/normalized_env.py" />
         <option value="$PROJECT_DIR$/maml_rl/policies/normal_mlp.py" />
         <option value="$PROJECT_DIR$/maml_rl/episode.py" />
-        <option value="$PROJECT_DIR$/rlkit/rlkit/core/rl_algorithm.py" />
         <option value="$USER_HOME$/anaconda3/envs/rllab3/lib/python3.5/site-packages/numpy/lib/function_base.py" />
         <option value="$PROJECT_DIR$/maml_rl/sampler.py" />
-        <option value="$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py" />
         <option value="$PROJECT_DIR$/maml_rl/metalearner.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/rlkit/rlkit/core/rl_algorithm.py" />
+        <option value="$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py" />
       </list>
     </option>
   </component>
@@ -251,7 +250,25 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.empowerment_skills">
+    <configuration name="empowerment_skills" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/maml_rl/policies" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="pytorch-maml-rl" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -324,35 +341,20 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
-    <configuration name="py.test in t_maml_rl.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="pytorch-maml-rl" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/t_maml_rl.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-    </configuration>
     <list size="5">
       <item index="0" class="java.lang.String" itemvalue="Python.main" />
-      <item index="1" class="java.lang.String" itemvalue="Python tests.py.test in t_maml_rl.py" />
-      <item index="2" class="java.lang.String" itemvalue="Python.t_maml_rl" />
-      <item index="3" class="java.lang.String" itemvalue="Python.sac" />
-      <item index="4" class="java.lang.String" itemvalue="Python.pusher" />
+      <item index="1" class="java.lang.String" itemvalue="Python.t_maml_rl" />
+      <item index="2" class="java.lang.String" itemvalue="Python.sac" />
+      <item index="3" class="java.lang.String" itemvalue="Python.pusher" />
+      <item index="4" class="java.lang.String" itemvalue="Python.empowerment_skills" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.main" />
-        <item index="1" class="java.lang.String" itemvalue="Python.pusher" />
-        <item index="2" class="java.lang.String" itemvalue="Python.t_maml_rl" />
-        <item index="3" class="java.lang.String" itemvalue="Python.sac" />
-        <item index="4" class="java.lang.String" itemvalue="Python tests.py.test in t_maml_rl.py" />
+        <item index="0" class="java.lang.String" itemvalue="Python.empowerment_skills" />
+        <item index="1" class="java.lang.String" itemvalue="Python.main" />
+        <item index="2" class="java.lang.String" itemvalue="Python.pusher" />
+        <item index="3" class="java.lang.String" itemvalue="Python.t_maml_rl" />
+        <item index="4" class="java.lang.String" itemvalue="Python.sac" />
       </list>
     </recent_temporary>
   </component>
@@ -719,14 +721,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maml_rl/baseline.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="18" column="7" lean-forward="false" selection-start-line="18" selection-start-column="7" selection-end-line="18" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/maml_rl/metalearner.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
@@ -737,31 +731,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/maml_rl/baseline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="18" column="7" lean-forward="false" selection-start-line="18" selection-start-column="7" selection-end-line="18" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/maml_rl/sampler.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="48" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="183" column="49" lean-forward="false" selection-start-line="183" selection-start-column="49" selection-end-line="183" selection-end-column="49" />
-          <folding>
-            <element signature="e#62#80#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rlkit/rlkit/core/rl_algorithm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="121">
-          <caret line="136" column="8" lean-forward="false" selection-start-line="136" selection-start-column="8" selection-end-line="136" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -775,10 +757,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="165" column="52" lean-forward="false" selection-start-line="165" selection-start-column="52" selection-end-line="165" selection-end-column="52" />
+        <state relative-caret-position="1702">
+          <caret line="173" column="45" lean-forward="false" selection-start-line="173" selection-start-column="45" selection-end-line="173" selection-end-column="45" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rlkit/rlkit/core/rl_algorithm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="310" column="29" lean-forward="false" selection-start-line="310" selection-start-column="29" selection-end-line="310" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="551" column="25" lean-forward="false" selection-start-line="551" selection-start-column="25" selection-end-line="551" selection-end-column="25" />
+          <folding>
+            <element signature="e#62#80#0" expanded="true" />
           </folding>
         </state>
       </provider>

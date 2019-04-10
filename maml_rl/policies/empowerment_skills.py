@@ -539,7 +539,8 @@ def experiment(variant):
                                   discriminator=discriminator_function,
                                   q_value_function_1=q_value_function_1,
                                   q_value_function_2=q_value_function_2,
-                                  value_function=value_function)
+                                  value_function=value_function,
+                                  higher_policy=policy)
 
     algorithm.to(ptu.device)
     algorithm.train()

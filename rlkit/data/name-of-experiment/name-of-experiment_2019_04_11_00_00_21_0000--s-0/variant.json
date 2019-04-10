@@ -1,0 +1,21 @@
+{
+  "algo_params": {
+    "add_p_z": true,
+    "batch_size": 128,
+    "discount": 0.99,
+    "include_actions": false,
+    "learn_p_z": false,
+    "max_path_length": 1000,
+    "num_epochs": 1000,
+    "num_steps_per_epoch": 1000,
+    "num_steps_per_eval": 1000,
+    "policy_lr": 0.0003,
+    "qf_lr": 0.0003,
+    "reward_scale": 1,
+    "soft_target_tau": 0.001,
+    "vf_lr": 0.0003
+  },
+  "net_size": 300,
+  "output_size": 1,
+  "skills_dim": 50
+}

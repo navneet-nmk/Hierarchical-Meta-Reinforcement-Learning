@@ -163,7 +163,7 @@ def main(args):
         for i, batch in enumerate(range(args.num_batches)):
 
             # Train the lower level policy
-            lower_trainer.train(higher_level_policy=higher_policy)
+            lower_trainer.train()
 
             # Now freeze the lower level policy
             lower_networks = lower_trainer.networks

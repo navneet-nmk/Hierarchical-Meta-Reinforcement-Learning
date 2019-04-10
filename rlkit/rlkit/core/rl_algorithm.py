@@ -144,9 +144,9 @@ class RLAlgorithm(metaclass=abc.ABCMeta):
         gt.reset()
         gt.set_def_unique(False)
         if self.collection_mode == 'online':
-            self.train_online(higher_level_policy, start_epoch=start_epoch)
+            self.train_online(self.higher_level_policy, start_epoch=start_epoch)
         elif self.collection_mode == 'batch':
-            self.train_batch(higher_level_policy, start_epoch=start_epoch)
+            self.train_batch(self.higher_level_policy, start_epoch=start_epoch)
         else:
             raise TypeError("Invalid collection_mode: {}".format(
                 self.collection_mode
