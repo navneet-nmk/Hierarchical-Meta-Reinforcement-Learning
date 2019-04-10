@@ -36,7 +36,6 @@ class HierarchicalMetaLearner(object):
                  ):
 
         self.sampler = sampler
-        self.l_policy.trainable = False
         self.h_policy = higher_level_policy
         self.baseline = baseline
         self.gamma = gamma

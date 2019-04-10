@@ -9,6 +9,8 @@ from maml_rl.sampler import BatchSampler
 from maml_rl.policies.empowerment_skills import EmpowermentSkills
 from rlkit.rlkit.torch.sac.policies import TanhGaussianPolicy
 from rlkit.rlkit.torch.networks import FlattenMlp
+from maml_rl.envs.mujoco.pusher import PusherEnv
+
 
 from tensorboardX import SummaryWriter
 
@@ -69,7 +71,8 @@ def hierarchical_meta_policy(env, skills_dim, sampler, output_size, net_size):
     )
 
     # Define the empowerment skills algorithm
-    algorithm = EmpowermentSkills(env=env,
+    env_pusher = PusherEnv()
+    algorithm = EmpowermentSkills(env=env_pusher,
                                   policy=policy,
                                   higher_policy=higher_policy,
                                   discriminator=discriminator_function,
@@ -160,7 +163,7 @@ def main(args):
         for i, batch in enumerate(range(args.num_batches)):
 
             # Train the lower level policy
-            lower_trainer.train(higher_policy)
+            lower_trainer.train(higher_level_policy=higher_policy)
 
             # Now freeze the lower level policy
             lower_networks = lower_trainer.networks
@@ -205,6 +208,7 @@ if __name__ == '__main__':
     import argparse
     import os
     import multiprocessing as mp
+
 
     parser = argparse.ArgumentParser(description='Reinforcement learning with '
         'Model-Agnostic Meta-Learning (MAML)')

@@ -180,8 +180,8 @@ class EmpowermentSkills(TorchRLAlgorithm):
             lr=disc_lr
         )
 
-        self.action_dim = self.env.action_space.flat_dim
-        self.obs_dim = self.env.observation_space.flat_dim
+        self.action_dim = self.env.action_space
+        self.obs_dim = self.env.observation_space
 
     def sample_empowerment_latents(self, observation):
         """Samples z from p(z), using probabilities in self.p_z."""
