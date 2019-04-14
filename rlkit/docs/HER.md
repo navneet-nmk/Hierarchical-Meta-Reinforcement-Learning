@@ -5,14 +5,14 @@ Some notes on the implementation of
 If you run the [Fetch example](examples/her/her_td3_gym_fetch_reach.py), then
  you should get results like this:
  ![Fetch HER results](images/FetchReach-v1_HER-TD3.png)
- 
-If you run the [Sawyer example](examples/her/her_td3_multiworld_sawyer_reach.py)
+
+If you run the [GridWorld example](examples/her/her_dqn_gridworld.py)
 , then you should get results like this:
- ![Sawyer HER results](images/SawyerReachXYZEnv-v0_HER-TD3.png)
- 
-Note that these examples use HER combined with TD3, and not DDPG.
-TD3 is a new method that came out after the HER paper, and it seems to work 
-better than DDPG.
+ ![HER Gridworld results](images/her_dqn.png)
+
+Note that these examples use HER combined with DQN and SAC, and not DDPG.
+
+These plots are generated using [viskit](https://github.com/vitchyr/viskit).
 
 ## Goal-based environments and `ObsDictRelabelingBuffer`
 [See here.](goal_based_envs.md)

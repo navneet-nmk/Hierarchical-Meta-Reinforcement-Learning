@@ -60,15 +60,19 @@ class ReplayBuffer(object, metaclass=abc.ABCMeta):
             path["env_infos"],
         )):
             self.add_sample(
-                obs,
-                action,
-                reward,
-                next_obs,
-                terminal,
+                observation=obs,
+                action=action,
+                reward=reward,
+                next_observation=next_obs,
+                terminal=terminal,
                 agent_info=agent_info,
                 env_info=env_info,
             )
         self.terminate_episode()
+
+    def add_paths(self, paths):
+        for path in paths:
+            self.add_path(path)
 
     @abc.abstractmethod
     def random_batch(self, batch_size):
@@ -78,3 +82,13 @@ class ReplayBuffer(object, metaclass=abc.ABCMeta):
         :return:
         """
         pass
+
+    def get_diagnostics(self):
+        return {}
+
+    def get_snapshot(self):
+        return {}
+
+    def end_epoch(self, epoch):
+        return
+

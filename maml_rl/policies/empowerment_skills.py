@@ -94,7 +94,7 @@ class EmpowermentSkills(TorchRLAlgorithm):
 
         super().__init__(
             env=env,
-            exploration_policy=exploration_policy or policy,
+            exploration_policy=policy,
             eval_policy=eval_policy,
             **kwargs
         )

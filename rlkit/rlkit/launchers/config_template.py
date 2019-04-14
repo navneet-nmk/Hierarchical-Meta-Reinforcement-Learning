@@ -3,7 +3,7 @@ Copy this file to config.py and modify as needed.
 """
 import os
 from os.path import join
-import rlkit
+import rlkit.rlkit as rlkit
 
 """
 `doodad.mount.MountLocal` by default ignores directories called "data"
