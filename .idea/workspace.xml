@@ -1,135 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e53e11ec-f3cd-4a7b-b9d2-2f28e76e339a" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py" afterPath="$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py" />
-      <change beforePath="$PROJECT_DIR$/rlkit/.gitignore" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/.idea/misc.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/.idea/modules.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/.idea/rlkit.iml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/.idea/vcs.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/.idea/workspace.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/LICENSE" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/README.md" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/data/name-of-experiment/name-of-experiment_2019_04_11_00_00_21_0000--s-0/params.pkl" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/data/name-of-experiment/name-of-experiment_2019_04_11_00_00_21_0000--s-0/progress.csv" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/data/name-of-experiment/name-of-experiment_2019_04_11_00_00_21_0000--s-0/variant.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/docs/HER.md" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/docs/RIG.md" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/docs/TDMs.md" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/docs/goal_based_envs.md" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/docs/images/FetchReach-v1_HER-TD3.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/docs/images/SawyerReachXYZEnv-v0_HER-TD3.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/environment/docker/Dockerfile" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/environment/docker/vendor/10_nvidia.json" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/environment/docker/vendor/Xdummy" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/environment/docker/vendor/Xdummy-entrypoint" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/environment/linux-cpu-env.yml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/environment/linux-gpu-env.yml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/environment/mac-env.yml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/ddpg.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/doodad/ec2_example.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/doodad/gcp_example.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/dqn_and_double_dqn.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/her/her_td3_gym_fetch_reach.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/her/her_td3_multiworld_sawyer_reach.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/rig/pointmass/oracle.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/rig/pointmass/rig.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/rig/pusher/oracle.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/rig/pusher/rig.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/sac.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/td3.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/tdm/ant_position.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/tdm/ant_position_and_velocity.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/tdm/cheetah.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/examples/tsac.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/core/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/core/eval_util.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/core/logging.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/core/rl_algorithm.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/core/serializable.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/core/tabulate.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/data_management/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/data_management/env_replay_buffer.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/data_management/normalizer.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/data_management/obs_dict_replay_buffer.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/data_management/path_builder.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/data_management/replay_buffer.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/data_management/simple_replay_buffer.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/envs/ant.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/envs/assets/low_gear_ratio_ant.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/envs/assets/reacher_7dof.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/envs/mujoco_env.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/envs/vae_wrapper.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/envs/wrappers.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/exploration_strategies/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/exploration_strategies/base.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/exploration_strategies/epsilon_greedy.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/exploration_strategies/gaussian_and_epsilon_strategy.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/exploration_strategies/gaussian_strategy.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/exploration_strategies/ou_strategy.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/launchers/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/launchers/config_template.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/launchers/launcher_util.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/launchers/rig_experiments.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/launchers/state_based_goal_experiments.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/policies/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/policies/argmax.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/policies/base.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/policies/simple.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/pythonplusplus.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/samplers/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/samplers/in_place.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/samplers/rollout_functions.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/samplers/util.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/conv_networks.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/core.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/data_management/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/data_management/normalizer.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/ddpg/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/ddpg/ddpg.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/distributions.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/dqn/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/dqn/double_dqn.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/dqn/dqn.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/her/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/her/her.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/her/her_replay_buffer.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/modules.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/networks.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/pytorch_util.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/sac/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/sac/policies.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/sac/sac.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/sac/twin_sac.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/td3/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/td3/td3.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/tdm/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/tdm/base.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/tdm/envs/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/tdm/envs/ant_env.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/tdm/envs/half_cheetah_env.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/tdm/envs/multitask_env.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/tdm/envs/reacher_7dof_env.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/tdm/her_replay_buffer.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/tdm/networks.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/tdm/sampling.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/tdm/tdm.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/torch_rl_algorithm.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/vae/conv_vae.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/vae/vae_base.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/torch/vae/vae_trainer.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/util/hyperparameter.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/util/io.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/rlkit/util/video.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/scripts/run_experiment_from_doodad.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/scripts/sim_goal_conditioned_policy.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/scripts/sim_policy.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/rlkit/scripts/sim_tdm_policy.py" afterPath="" />
-    </list>
+    <list default="true" id="e53e11ec-f3cd-4a7b-b9d2-2f28e76e339a" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -139,11 +11,35 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="sac.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="sac.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rlkit/rlkit/torch/sac/sac.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="11" lean-forward="false" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
+            <state relative-caret-position="315">
+              <caret line="21" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="226" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#35#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="emp_skills_trainer.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/maml_rl/policies/emp_skills_trainer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3245">
+              <caret line="226" column="0" lean-forward="true" selection-start-line="226" selection-start-column="0" selection-end-line="226" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#35#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="empowerment_skills.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="263">
+              <caret line="544" column="28" lean-forward="false" selection-start-line="544" selection-start-column="28" selection-end-line="544" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -233,6 +129,7 @@
         <option value="$PROJECT_DIR$/rlkit/rlkit/core/batch_rl_algorithm.py" />
         <option value="$PROJECT_DIR$/rlkit/rlkit/core/rl_algorithm.py" />
         <option value="$PROJECT_DIR$/rlkit/rlkit/core/online_rl_algorithm.py" />
+        <option value="$PROJECT_DIR$/maml_rl/policies/emp_skills_trainer.py" />
       </list>
     </option>
   </component>
@@ -265,6 +162,17 @@
             <path>
               <item name="pytorch-maml-rl" type="b2602c69:ProjectViewProjectNode" />
               <item name="pytorch-maml-rl" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pytorch-maml-rl" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pytorch-maml-rl" type="462c0819:PsiDirectoryNode" />
+              <item name="maml_rl" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pytorch-maml-rl" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pytorch-maml-rl" type="462c0819:PsiDirectoryNode" />
+              <item name="maml_rl" type="462c0819:PsiDirectoryNode" />
+              <item name="policies" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="pytorch-maml-rl" type="b2602c69:ProjectViewProjectNode" />
@@ -459,8 +367,8 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34588236" sideWeight="0.121527776" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34588236" sideWeight="0.8784722" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0" sideWeight="0.121527776" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0" sideWeight="0.8784722" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -486,13 +394,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/maml_rl/envs/subproc_vec_env.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/maml_rl/serializable.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="675">
@@ -696,16 +597,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="544" column="28" lean-forward="false" selection-start-line="544" selection-start-column="28" selection-end-line="544" selection-end-column="28" />
-          <folding>
-            <element signature="e#62#80#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rlkit/rlkit/data_management/env_replay_buffer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -886,9 +777,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rlkit/rlkit/torch/sac/sac.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="11" lean-forward="false" selection-start-line="9" selection-start-column="11" selection-end-line="9" selection-end-column="11" />
+        <state relative-caret-position="315">
+          <caret line="21" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="226" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/maml_rl/policies/empowerment_skills.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="544" column="28" lean-forward="false" selection-start-line="544" selection-start-column="28" selection-end-line="544" selection-end-column="28" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/maml_rl/policies/emp_skills_trainer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3245">
+          <caret line="226" column="0" lean-forward="true" selection-start-line="226" selection-start-column="0" selection-end-line="226" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
