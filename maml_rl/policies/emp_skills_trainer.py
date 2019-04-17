@@ -439,6 +439,9 @@ class EmpowermentSkillsTrainer(TorchTrainer):
             self.qf2,
             self.target_qf1,
             self.target_qf2,
+            self.target_vf,
+            self.discriminator,
+            self.value_network
         ]
 
     def get_snapshot(self):
@@ -448,5 +451,8 @@ class EmpowermentSkillsTrainer(TorchTrainer):
             qf2=self.qf2,
             target_qf1=self.qf1,
             target_qf2=self.qf2,
+            value=self.value_network,
+            discriminator=self.discriminator,
+            target_value=self.target_vf,
         )
 
