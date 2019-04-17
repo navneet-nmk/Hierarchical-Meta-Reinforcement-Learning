@@ -10,22 +10,38 @@ from rlkit.rlkit.core.eval_util import create_stats_ordered_dict
 from rlkit.rlkit.torch.torch_rl_algorithm import TorchTrainer
 
 
-class SACTrainer(TorchTrainer):
+class EmpowermentSkillsTrainer(TorchTrainer):
     def __init__(
             self,
             env,
+            higher_level_policy,
             policy,
             qf1,
             qf2,
             target_qf1,
             target_qf2,
+            value_function,
+            discriminator,
 
             discount=0.99,
             reward_scale=1.0,
 
             policy_lr=1e-3,
             qf_lr=1e-3,
+            value_lr=1e-3,
+            discriminator_lr=1e-3,
             optimizer_class=optim.Adam,
+
+            lr=3E-3,
+            scale_entropy=1,
+            tau=0.01,
+            num_skills=50,
+            save_full_state=False,
+            find_best_skill_interval=10,
+            best_skill_n_rollouts=10,
+            learn_p_z=False,
+            include_actions=False,
+            add_p_z=True,
 
             soft_target_tau=1e-2,
             target_update_period=1,
@@ -41,8 +57,21 @@ class SACTrainer(TorchTrainer):
         self.qf2 = qf2
         self.target_qf1 = target_qf1
         self.target_qf2 = target_qf2
+        self.discriminator = discriminator
+        self.value_network = value_function
         self.soft_target_tau = soft_target_tau
         self.target_update_period = target_update_period
+        self.higher_policy = higher_level_policy
+
+        self.tau = tau
+        self.num_skills = num_skills
+        self.save_full_state = save_full_state
+        self.find_best_skill_interval = find_best_skill_interval
+        self.best_skill_n_rollouts = best_skill_n_rollouts
+        self.learn_p_z = learn_p_z
+        self.include_actions = include_actions
+        self.add_p_z = add_p_z
+        self.p_z = np.full(num_skills, 1.0 / num_skills)
 
         self.use_automatic_entropy_tuning = use_automatic_entropy_tuning
         if self.use_automatic_entropy_tuning:
@@ -73,6 +102,16 @@ class SACTrainer(TorchTrainer):
         self.qf2_optimizer = optimizer_class(
             self.qf2.parameters(),
             lr=qf_lr,
+        )
+
+        self.discriminator_optimizer = optimizer_class(
+            self.discriminator.parameters(),
+            lr=discriminator_lr
+        )
+
+        self.vf_optimizer = optimizer_class(
+            self.value_network.parameters(),
+            lr=value_lr,
         )
 
         self.discount = discount

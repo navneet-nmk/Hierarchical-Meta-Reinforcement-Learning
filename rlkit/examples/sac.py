@@ -78,8 +78,6 @@ def experiment(variant):
     algorithm.train()
 
 
-
-
 if __name__ == "__main__":
     # noinspection PyTypeChecker
     variant = dict(
