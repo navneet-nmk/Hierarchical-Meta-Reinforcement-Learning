@@ -455,4 +455,3 @@ class EmpowermentSkillsTrainer(TorchTrainer):
             discriminator=self.discriminator,
             target_value=self.target_vf,
         )
-
