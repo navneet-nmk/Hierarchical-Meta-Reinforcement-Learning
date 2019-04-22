@@ -1,10 +1,12 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.distributions import Categorical
+from torch.distributions import OneHotCategorical
 
 from collections import OrderedDict
 from maml_rl.policies.policy import Policy, weight_init
+import rlkit.rlkit.torch.pytorch_util as ptu
+import numpy as np
 
 class CategoricalMLPPolicy(Policy):
     """Policy network based on a multi-layer perceptron (MLP), with a 
@@ -26,9 +28,16 @@ class CategoricalMLPPolicy(Policy):
                 nn.Linear(layer_sizes[i - 1], layer_sizes[i]))
         self.apply(weight_init)
 
+    def torch_ify(self, np_array_or_other):
+        if isinstance(np_array_or_other, np.ndarray):
+            return ptu.from_numpy(np_array_or_other)
+        else:
+            return np_array_or_other
+
     def forward(self, input, params=None):
         if params is None:
             params = OrderedDict(self.named_parameters())
+        input = self.torch_ify(input)
         output = input
         for i in range(1, self.num_layers):
             output = F.linear(output,
@@ -39,4 +48,4 @@ class CategoricalMLPPolicy(Policy):
             weight=params['layer{0}.weight'.format(self.num_layers)],
             bias=params['layer{0}.bias'.format(self.num_layers)])
 
-        return Categorical(logits=logits)
+        return OneHotCategorical(logits=logits)
