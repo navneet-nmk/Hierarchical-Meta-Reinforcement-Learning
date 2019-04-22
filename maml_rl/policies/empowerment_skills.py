@@ -86,10 +86,12 @@ def experiment(variant):
     eval_path_collector = MdpPathCollector(
         eval_env,
         eval_policy,
+        higher_level_policy,
     )
     expl_path_collector = MdpPathCollector(
         expl_env,
         policy,
+        higher_level_policy,
     )
     replay_buffer = EnvReplayBuffer(
         variant['replay_buffer_size'],

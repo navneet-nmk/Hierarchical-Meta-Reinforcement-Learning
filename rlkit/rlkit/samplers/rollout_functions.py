@@ -70,7 +70,8 @@ def multitask_rollout(
     )
 
 
-def rollout(env, agent, max_path_length=np.inf, animated=False):
+def rollout(env, agent, higher_level_policy, max_path_length=np.inf,
+            animated=False, ):
     """
     The following value for the following keys will be a 2D array, with the
     first dimension corresponding to the time dimension.
@@ -85,6 +86,7 @@ def rollout(env, agent, max_path_length=np.inf, animated=False):
      - agent_infos
      - env_infos
     """
+    higher_level_policy.eval()
     observations = []
     actions = []
     rewards = []
@@ -98,6 +100,8 @@ def rollout(env, agent, max_path_length=np.inf, animated=False):
     if animated:
         env.render()
     while path_length < max_path_length:
+        skills = higher_level_policy(o)
+        o = o+skills
         a, agent_info = agent.get_action(o)
         next_o, r, d, env_info = env.step(a)
         observations.append(o)

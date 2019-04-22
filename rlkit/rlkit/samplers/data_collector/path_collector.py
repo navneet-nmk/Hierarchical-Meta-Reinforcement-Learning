@@ -11,10 +11,12 @@ class MdpPathCollector(PathCollector):
             self,
             env,
             policy,
+            higher_level_policy,
             max_num_epoch_paths_saved=None,
     ):
         self._env = env
         self._policy = policy
+        self._h_l_policy = higher_level_policy
         self._max_num_epoch_paths_saved = max_num_epoch_paths_saved
         self._epoch_paths = deque(maxlen=self._max_num_epoch_paths_saved)
 
@@ -37,6 +39,7 @@ class MdpPathCollector(PathCollector):
             path = rollout(
                 self._env,
                 self._policy,
+                self._h_l_policy,
                 max_path_length=max_path_length_this_loop,
             )
             path_len = len(path['actions'])
