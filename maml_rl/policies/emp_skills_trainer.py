@@ -26,6 +26,7 @@ class EmpowermentSkillsTrainer(TorchTrainer):
             target_qf1,
             target_qf2,
             value_function,
+            target_vf,
             discriminator,
 
             discount=0.99,
@@ -73,7 +74,7 @@ class EmpowermentSkillsTrainer(TorchTrainer):
         self.target_update_period = target_update_period
         self.higher_policy = higher_level_policy
         # Define the target value function
-        self.target_vf = self.value_network.copy()
+        self.target_vf = target_vf
         self.train_policy_with_reparameterization = train_policy_with_reparameterization
 
         self.soft_target_tau = soft_target_tau
