@@ -157,7 +157,7 @@ class EmpowermentSkillsTrainer(TorchTrainer):
         return obs, z_one_hot
 
     def update_critic(self, observation, action,
-                      p_z_given, next_observation, done, z_one_hot):
+                      p_z_given, next_observation, done):
 
         """
         Create minimization operation for the critic Q function.
@@ -165,7 +165,7 @@ class EmpowermentSkillsTrainer(TorchTrainer):
         """
 
         # Get the q value for the observation(obs, z_one_hot) and action.
-        observation = np.concatenate([observation, z_one_hot])
+
         q_value_1 = self.qf1(observation, action)
         q_value_2 = self.qf2(observation, action)
 
