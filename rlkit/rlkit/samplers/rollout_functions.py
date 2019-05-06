@@ -102,8 +102,8 @@ def rollout(env, agent, higher_level_policy, max_path_length=np.inf,
     while path_length < max_path_length:
         skills = higher_level_policy(o)
         skills = skills.sample().cpu().numpy()
-        o = np.concatenate([o, skills])
-        a, agent_info = agent.get_action(o)
+        skills = np.expand_dims(skills, axis=0)
+        a, agent_info = agent.get_action(o, skill=skills)
         next_o, r, d, env_info = env.step(a)
         observations.append(o)
         rewards.append(r)

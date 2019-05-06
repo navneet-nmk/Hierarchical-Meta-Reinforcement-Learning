@@ -59,16 +59,17 @@ class TanhGaussianPolicy(Mlp, ExplorationPolicy):
             self.log_std = np.log(std)
             assert LOG_SIG_MIN <= self.log_std <= LOG_SIG_MAX
 
-    def get_action(self, obs_np, deterministic=False):
-        actions = self.get_actions(obs_np[None], deterministic=deterministic)
+    def get_action(self, obs_np, skill=None, deterministic=False):
+        actions = self.get_actions(obs_np[None], skill, deterministic=deterministic)
         return actions[0, :], {}
 
-    def get_actions(self, obs_np, deterministic=False):
-        return eval_np(self, obs_np, deterministic=deterministic)[0]
+    def get_actions(self, obs_np, skill, deterministic=False):
+        return eval_np(self, obs_np, skill, deterministic=deterministic)[0]
 
     def forward(
             self,
             obs,
+            skill=None,
             reparameterize=True,
             deterministic=False,
             return_log_prob=False,
@@ -78,7 +79,10 @@ class TanhGaussianPolicy(Mlp, ExplorationPolicy):
         :param deterministic: If True, do not sample
         :param return_log_prob: If True, return a sample and its log probability
         """
-        h = obs
+        if skill is not None:
+            h = torch.cat([obs, skill], -1)
+        else:
+            h = obs
         for i, fc in enumerate(self.fcs):
             h = self.hidden_activation(fc(h))
         mean = self.last_fc(h)
@@ -128,6 +132,7 @@ class MakeDeterministic(Policy):
     def __init__(self, stochastic_policy):
         self.stochastic_policy = stochastic_policy
 
-    def get_action(self, observation):
+    def get_action(self, observation, skill=None):
         return self.stochastic_policy.get_action(observation,
+                                                 skill,
                                                  deterministic=True)
